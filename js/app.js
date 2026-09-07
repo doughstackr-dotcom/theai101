@@ -20,11 +20,14 @@ const NAV = `
 <div class="nav-inner">
   <a class="logo" href="/"><span class="mark"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><rect x="2.5" y="7" width="4" height="6.5" rx="1.2" fill="#fff"/><line x1="4.5" y1="3" x2="4.5" y2="16" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><rect x="11" y="3.5" width="4" height="7.5" rx="1.2" fill="#1c1207"/><line x1="13" y1="1.5" x2="13" y2="16.5" stroke="#1c1207" stroke-width="1.6" stroke-linecap="round"/></svg></span>TheAI<span class="tick" style="color:var(--accent)">101</span></a>
   <div class="links" id="navLinks">
+    <a href="/candles/anatomy.html" data-nav="anatomy">Start here</a>
     <a href="/academy/" data-nav="academy">Academy</a>
     <a href="/practice/" data-nav="practice-live">Live Practice</a>
     <a href="/candles/patterns.html" data-nav="patterns">Patterns</a>
     <a href="/patterns/" data-nav="chartp">Chart Shapes</a>
     <a href="/markets/" data-nav="markets">Markets</a>
+    <a href="/prolab/" data-nav="prolab">Pro Labs</a>
+    <a href="/cheatsheet/" data-nav="cheatsheet">Cheat sheet</a>
     <a href="https://trading-101.printify.me" data-nav="shop" target="_blank" rel="noopener">Shop</a>
   </div>
   <button class="theme-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" style="margin-left:auto;display:none">${MENU}</button>
@@ -35,7 +38,7 @@ const NAV = `
 const FOOT = `
 <div class="foot-inner">
   <div><b style="font-family:var(--disp)">TheAI101</b> — learn the charts, wear the charts.</div>
-  <div><a href="/academy/">Academy</a> · <a href="/practice/">Live Practice</a> · <a href="/candles/patterns.html">Patterns</a> · <a href="/markets/">Markets</a> · <a href="https://trading-101.printify.me" target="_blank" rel="noopener">Shop</a> · <a href="/about.html">About</a></div>
+  <div><a href="/candles/anatomy.html">Start here</a> · <a href="/academy/">Academy</a> · <a href="/practice/">Live Practice</a> · <a href="/candles/patterns.html">Patterns</a> · <a href="/markets/">Markets</a> · <a href="/prolab/">Pro Labs</a> · <a href="/cheatsheet/">Cheat sheet</a> · <a href="https://trading-101.printify.me" target="_blank" rel="noopener">Shop</a> · <a href="/about.html">About</a></div>
   <div>Educational content only — not financial advice. Market data for practice only.</div>
 </div>`;
 
@@ -58,6 +61,8 @@ function initTicker(){
     return `<span class="ticker-item" data-sym="${k}"><b>${k}-USD</b><span class="v flat">—</span><span class="d"></span></span>`;
   }
   track.innerHTML = [0,1].map(()=>keys.map(itemHTML).join('')).join('');
+  // the second copy exists only to loop the marquee — hide it from screen readers
+  track.querySelectorAll('.ticker-item').forEach((el,i)=>{ if(i >= keys.length) el.setAttribute('aria-hidden','true'); });
   const apply = (k, p)=>{
     const prev = parseFloat(track.querySelector(`.ticker-item[data-sym="${k}"] .v`).dataset.p || '0');
     const dir = prev && p !== prev ? (p > prev ? 'up':'down') : 'flat';
@@ -158,6 +163,17 @@ function countUps(){
     requestAnimationFrame(tick);
   });
 }
+
+/* ── analytics (Plausible, only when enabled in js/config.js) ── */
+try{
+  if(window.AI_CONFIG && window.AI_CONFIG.plausibleDomain){
+    const s = document.createElement('script');
+    s.defer = true;
+    s.setAttribute('data-domain', window.AI_CONFIG.plausibleDomain);
+    s.src = 'https://plausible.io/js/script.js';
+    document.head.appendChild(s);
+  }
+}catch(_e){}
 
 document.addEventListener('DOMContentLoaded', ()=>{
   initTheme();

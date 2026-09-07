@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://theai101.shop/sitemap.xml

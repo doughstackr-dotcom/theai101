@@ -1,4 +1,9 @@
-/* TheAI101 pattern library — data + draw functions for candlesticks & chart patterns */
+/* TheAI101 pattern library — data + draw functions for candlesticks & chart patterns.
+   Each candle pattern also carries follow-through teaching data:
+     next  = what typically happens after the pattern (plain English)
+     tail  = the pattern's final candles as [o,h,l,c] on the 0-100 schematic scale
+     after = 3 typical follow-through candles continuing from tail
+*/
 (function(){
 'use strict';
 const AI = window.AI = window.AI || {};
@@ -30,7 +35,10 @@ AI.candles = [
   see:'A small red candle gets completely swallowed by the next candle\'s bigger green body — open below, close above.',
   means:'Sellers pushed price down, buyers took over entirely within one session. Momentum flipped.',
   how:'Enter on the next candle\'s open (or a break above the engulfing body). Stop just under the engulfing low. First target: the recent swing high.',
-  fail:'A tiny green candle in a wide range, or one appearing in a sideways market, is noise — the engulfing body should be clearly larger and the downtrend real.'
+  fail:'A tiny green candle in a wide range, or one appearing in a sideways market, is noise — the engulfing body should be clearly larger and the downtrend real.',
+  next:'Follow-through higher is the base case: 1-3 green candles extending the reclaim, usually at least back to the prior swing high before the first pause.',
+  tail:[[49,52,44,44],[43,61,41,58],[59,68,56,66]],
+  after:[[66,75,64,73],[73,80,71,78],[78,86,76,84]]
 },
 {
   name:'Bearish Engulfing', bias:'Bearish', trend:'Appears in an uptrend',
@@ -46,7 +54,10 @@ AI.candles = [
   see:'A small green candle is swallowed whole by the next candle\'s bigger red body.',
   means:'Buyers had control, then sellers erased the entire session — and more — in one candle.',
   how:'Enter short (or exit longs) on the next open. Stop just above the engulfing high. Target the prior swing low.',
-  fail:'Same trap as the bullish twin: the body must visibly dwarf the prior candle, and it should appear after a real advance, not mid-chop.'
+  fail:'Same trap as the bullish twin: the body must visibly dwarf the prior candle, and it should appear after a real advance, not mid-chop.',
+  next:'Follow-through lower within 1-3 candles, commonly straight into the base of the advance that started the pattern.',
+  tail:[[47,55,45,52],[55,57,38,40],[40,42,29,32]],
+  after:[[32,34,24,26],[26,28,19,21],[21,23,14,16]]
 },
 {
   name:'Hammer', bias:'Bullish', trend:'Ends a downtrend',
@@ -60,7 +71,10 @@ AI.candles = [
   see:'A candle with a little body at the top and a long lower wick 2–3× the body — sellers dove, buyers slammed the door.',
   means:'The low was rejected. Demand stepped in and erased most of the sell-off before the close.',
   how:'Enter above the hammer\'s high (aggressive) or above the next candle\'s high (conservative). Stop under the wick low.',
-  fail:'Without the preceding downtrend it\'s just a candle. A close near the low, or a wick that gets broken days later, kills the signal.'
+  fail:'Without the preceding downtrend it\'s just a candle. A close near the low, or a wick that gets broken days later, kills the signal.',
+  next:'The reclaim tends to extend with higher lows; the level that broke before the hammer is the usual first target within a few candles.',
+  tail:[[46,55,28,53],[53,62,51,60],[60,70,58,68]],
+  after:[[68,76,66,74],[74,81,72,79],[79,86,77,84]]
 },
 {
   name:'Shooting Star', bias:'Bearish', trend:'Ends an uptrend',
@@ -74,7 +88,10 @@ AI.candles = [
   see:'Small body at the bottom, long upper wick — a rally that was fully rejected from above.',
   means:'Supply overwhelmed demand at the highs. The bloom came off the rally intraday.',
   how:'Enter below the star\'s low. Stop above the wick high. Target the base of the move.',
-  fail:'In a strong uptrend this is often just a pause — wait for the next candle to confirm lower before acting.'
+  fail:'In a strong uptrend this is often just a pause — wait for the next candle to confirm lower before acting.',
+  next:'Selling usually resumes within 1-3 candles. The first lower low after the star is the confirmation that the rejection stuck.',
+  tail:[[53,78,44,46],[46,48,36,38],[38,40,28,30]],
+  after:[[30,32,22,24],[24,26,17,19],[19,21,12,14]]
 },
 {
   name:'Doji', bias:'Neutral', trend:'Any trend — a warning light',
@@ -88,7 +105,10 @@ AI.candles = [
   see:'Open and close are (nearly) identical, so the body is a thin line — the wicks show both sides fought to a draw.',
   means:'Indecision. On its own it predicts nothing — what matters is which side breaks out next.',
   how:'Don\'t trade the doji — trade the break: long above its high, short below its low, stop on the other side.',
-  fail:'In low volume or tight ranges dojis are everywhere and mean nothing. Long-legged dojis at extremes are the meaningful ones.'
+  fail:'In low volume or tight ranges dojis are everywhere and mean nothing. Long-legged dojis at extremes are the meaningful ones.',
+  next:'Nothing on its own — the doji is the pause before the break. Expect a decisive candle through its high or low; the upside resolution is drawn here, and the same logic mirrors down.',
+  tail:[[50,62,38,50.5],[51,62,49,60],[60,68,58,66]],
+  after:[[66,74,64,72],[72,79,70,77],[77,84,75,82]]
 },
 {
   name:'Morning Star', bias:'Bullish', trend:'Ends a downtrend',
@@ -103,7 +123,10 @@ AI.candles = [
   see:'Three candles: a strong red, a small-bodied pause (the "star"), then a strong green that climbs back into the first body.',
   means:'Selling pressure exhausted itself in the middle candle — the third confirms the reversal.',
   how:'Enter on the third candle\'s close or next open. Stop below the star\'s low. It\'s a slower, more reliable reversal than a single hammer.',
-  fail:'If the third candle fails to close past the midpoint of the first, the "star" was just a rest stop in the downtrend.'
+  fail:'If the third candle fails to close past the midpoint of the first, the "star" was just a rest stop in the downtrend.',
+  next:'Three-candle reversals carry extra evidence, so the follow-through leg tends to be orderly: higher lows and a measured move back toward the prior high.',
+  tail:[[42,45,35,38],[39,57,37,54],[55,65,53,63]],
+  after:[[63,71,61,69],[69,76,67,74],[74,81,72,79]]
 },
 {
   name:'Evening Star', bias:'Bearish', trend:'Ends an uptrend',
@@ -118,7 +141,10 @@ AI.candles = [
   see:'The mirror of morning star: strong green, small pause on top, strong red back into the first body.',
   means:'The last buyers bought the top of the move and are now underwater.',
   how:'Enter short on the third candle\'s close. Stop above the star\'s high.',
-  fail:'Needs the uptrend and the full three-candle structure — a single red candle after a pause is not an evening star.'
+  fail:'Needs the uptrend and the full three-candle structure — a single red candle after a pause is not an evening star.',
+  next:'Expect the reversal to extend into a full leg down; the star high becomes the ceiling that caps retests.',
+  tail:[[61,66,58,63],[60,62,44,46],[46,48,36,38]],
+  after:[[38,40,30,32],[32,34,24,26],[26,28,18,20]]
 },
 {
   name:'Three White Soldiers', bias:'Bullish', trend:'Ends a downtrend',
@@ -131,7 +157,10 @@ AI.candles = [
   see:'Three consecutive strong green candles, each opening inside the prior body and closing near its high — a steady stair-step advance.',
   means:'Persistent demand across multiple sessions — not a one-candle spike, a regime change.',
   how:'Enter on a pullback to the first soldier\'s body rather than chasing the third. Stop under the first soldier\'s low.',
-  fail:'If each candle\'s body shrinks or upper wicks grow, buyers are tiring. After a huge drop, this can be a dead-cat bounce — check the bigger trend.'
+  fail:'If each candle\'s body shrinks or upper wicks grow, buyers are tiring. After a huge drop, this can be a dead-cat bounce — check the bigger trend.',
+  next:'The stair-step usually continues, but grade the candles as they come: shrinking bodies or growing upper wicks mean the march is tiring.',
+  tail:[[32,41,30,39],[39,50,37,48],[48,59,46,57]],
+  after:[[57,64,55,62],[62,69,60,67],[67,73,65,71]]
 },
 {
   name:'Three Black Crows', bias:'Bearish', trend:'Ends an uptrend',
@@ -144,7 +173,10 @@ AI.candles = [
   see:'Three long red candles stair-stepping down, each opening inside the prior body and closing near its low.',
   means:'Relentless supply. Each day\'s attempt to rally is sold before the close.',
   how:'Enter short on a bounce into the first crow\'s body. Stop above its high.',
-  fail:'Three red candles in a range are just noise — crows matter at the top of an extended advance.'
+  fail:'Three red candles in a range are just noise — crows matter at the top of an extended advance.',
+  next:'Supply tends to extend. The classic continuation is a weak bounce into the first crow\'s body that rolls over and prints the next low.',
+  tail:[[53,56,44,46],[46,48,36,38],[38,40,28,30]],
+  after:[[30,32,22,24],[24,26,16,18],[18,20,11,13]]
 },
 {
   name:'Bullish Harami', bias:'Bullish', trend:'Ends a downtrend',
@@ -159,7 +191,10 @@ AI.candles = [
   see:'A very long red candle ("the mother") followed by a small candle whose entire body fits inside the mother\'s body. "Harami" = pregnant in Japanese.',
   means:'The selling stalled — the small body shows the balance of power shifting, gently.',
   how:'It\'s an early warning, not a trigger. Buy a break above the mother\'s high, or the small candle\'s high. Stop below the mother\'s low.',
-  fail:'A harami in the middle of a range means nothing. The longer the mother candle, the stronger the signal.'
+  fail:'A harami in the middle of a range means nothing. The longer the mother candle, the stronger the signal.',
+  next:'The break above the mother candle\'s high is the trigger; once it comes, follow-through commonly fills the mother candle\'s range.',
+  tail:[[62,64,40,42],[46,56,44,54],[56,66,54,64]],
+  after:[[64,72,62,70],[70,77,68,75],[75,82,73,80]]
 },
 {
   name:'Bearish Harami', bias:'Bearish', trend:'Ends an uptrend',
@@ -174,7 +209,10 @@ AI.candles = [
   see:'Long green mother candle, then a small red candle fully inside its body.',
   means:'Buying momentum stalled inside one session — the reversal candidate.',
   how:'Sell/short a break below the small candle\'s low. Stop above the mother\'s high.',
-  fail:'Same as its twin: needs a trend to reverse. Inside bodies in chop are coin flips.'
+  fail:'Same as its twin: needs a trend to reverse. Inside bodies in chop are coin flips.',
+  next:'The break below the small candle\'s low starts the move; the mother candle\'s range is the usual first objective.',
+  tail:[[42,63,40,60],[54,56,44,46],[46,48,36,38]],
+  after:[[36,38,28,30],[30,32,22,24],[24,26,16,18]]
 },
 {
   name:'Tweezer Bottom', bias:'Bullish', trend:'Ends a downtrend',
@@ -189,7 +227,10 @@ AI.candles = [
   see:'Two adjacent candles whose lows land on (almost) the same price — a double-test of the same floor.',
   means:'The level rejected sellers twice. Support is real, someone is defending it.',
   how:'Enter above the second candle\'s high. Stop a hair below the shared low — if it breaks, you\'re wrong.',
-  fail:'Wicks must genuinely match — "close enough" across a wide range isn\'t a tweezer. Best at obvious support (prior lows, round numbers).'
+  fail:'Wicks must genuinely match — "close enough" across a wide range isn\'t a tweezer. Best at obvious support (prior lows, round numbers).',
+  next:'A defended floor tends to produce a multi-candle bounce: the shared low becomes the line in the sand for the next several candles.',
+  tail:[[44,47,30,37],[38,46,30.5,44],[45,55,43,53]],
+  after:[[53,61,51,59],[59,66,57,64],[64,70,62,68]]
 },
 {
   name:'Tweezer Top', bias:'Bearish', trend:'Ends an uptrend',
@@ -204,7 +245,10 @@ AI.candles = [
   see:'Two back-to-back candles with matching highs — a double-tap on the same ceiling.',
   means:'Resistance held twice. Sellers are parked at that price.',
   how:'Enter below the second candle\'s low. Stop just above the shared high.',
-  fail:'Needs a real ceiling (prior high, resistance zone). Two matching highs mid-range is coincidence.'
+  fail:'Needs a real ceiling (prior high, resistance zone). Two matching highs mid-range is coincidence.',
+  next:'Rotation away from the shared high is the base case; the matching ceiling tends to cap retests for several candles before anything breaks it.',
+  tail:[[62,71,61,70],[70,71.5,66,64],[64,66,54,56]],
+  after:[[56,58,48,50],[50,52,42,44],[44,46,36,38]]
 },
 {
   name:'Marubozu', bias:'Bullish or Bearish', trend:'Any — a statement candle',
@@ -218,7 +262,10 @@ AI.candles = [
   see:'A full-bodied candle with no wicks (or barely any): green opens at the low and closes at the high; red does the opposite.',
   means:'One side controlled 100% of the session. Green = pure demand, red = pure supply.',
   how:'A green marubozu breaking a resistance level is a textbook breakout entry; the stop goes below the candle\'s low (which is also its open).',
-  fail:'A marubozu at the very end of an extended move can be a blow-off/cluster of stop-losses — the reversal candle often follows within days.'
+  fail:'A marubozu at the very end of an extended move can be a blow-off/cluster of stop-losses — the reversal candle often follows within days.',
+  next:'A green marubozu usually extends for at least one more leg; a red one mirrors it lower. The exception is the blow-off after an extended run, where the reversal candle often prints within days.',
+  tail:[[20,80,20,80]],
+  after:[[80,88,78,86],[86,92,84,90],[90,96,88,94]]
 }
 ];
 
@@ -317,8 +364,8 @@ AI.chartPatterns = [
 // generic chart-pattern renderer (zigzag on a framed chart)
 AI.drawChartPattern = function(ctx, W, H, pat){
   ctx.scale(0,100);
-  ctx.title(pat.name.toUpperCase(), '#64748b');
+  ctx.title(pat.name.toUpperCase(), 'dim');
   const px = pat.pts.map(p=>[ctx.pad.l + p[0]/100*(W-ctx.pad.l-ctx.pad.r), ctx.y2px(p[1])]);
-  ctx.zigzag(px, pat.bias==='Bullish' ? '#22c55e' : pat.bias==='Bearish' ? '#ef4444' : '#a78bfa');
+  ctx.zigzag(px, pat.bias==='Bullish' ? 'up' : pat.bias==='Bearish' ? 'down' : 'accent');
 };
 })();

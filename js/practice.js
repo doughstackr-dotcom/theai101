@@ -21,17 +21,25 @@ let bucketMs = 15000;
 /* live candle state for the calls arena */
 const live = {
   sub:null, candles:[], bucket:null, lastPrice:null, lastTickAt:0,
-  prediction:null, timer:null, redrawQueued:false, seededWith:null
+  prediction:null, timer:null, redrawQueued:false, seededWith:null,
+  anchorPhase:null
 };
 
 function load(){
+  const base = {calls:{a:0,r:0,s:0,b:0,history:[]}, pattern:{a:0,r:0,s:0,b:0}, trend:{a:0,r:0,s:0,b:0}};
   try{
     const raw = localStorage.getItem(STORE);
-    if(raw) return Object.assign({calls:{a:0,r:0,s:0,b:0}, pattern:{a:0,r:0,s:0,b:0}, trend:{a:0,r:0,s:0,b:0}}, JSON.parse(raw));
+    if(raw){
+      const s = Object.assign(base, JSON.parse(raw));
+      if(!Array.isArray(s.calls.history)) s.calls.history = []; // backward compat
+      return s;
+    }
   }catch(_e){}
-  return {calls:{a:0,r:0,s:0,b:0}, pattern:{a:0,r:0,s:0,b:0}, trend:{a:0,r:0,s:0,b:0}};
+  return base;
 }
 function save(){ try{ localStorage.setItem(STORE, JSON.stringify(stats)); }catch(_e){} }
+/* positive modulo — candle-bucket math needs it (JS % keeps the sign) */
+function mod(a, n){ return ((a % n) + n) % n; }
 function shuffle(a){
   const x = a.slice();
   for(let i=x.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [x[i],x[j]]=[x[j],x[i]]; }
@@ -91,6 +99,9 @@ async function seedCalls(){
   try{
     const kl = await AI.market.klines(sym, '1m', 30);
     live.seededWith = kl[kl.length-1] ? kl[kl.length-1].t : null;
+    /* anchor practice buckets to exchange time: the phase (ms) of the first
+       bucket boundary after the newest real 1m candle (t is epoch ms) */
+    live.anchorPhase = kl.length ? mod(kl[kl.length-1].t + 60000, bucketMs) : null;
     live.candles = kl;
     drawCalls();
     $('callsErr').hidden = true;
@@ -98,18 +109,25 @@ async function seedCalls(){
     $('callsErr').hidden = false;
   }
 }
+/* start of the bucket containing `now` — aligned to the exchange clock when
+   an anchor phase is known, else to plain device-clock bucket multiples */
+function bucketStart(now){
+  return live.anchorPhase != null
+    ? now - mod(now - live.anchorPhase, bucketMs)
+    : now - mod(now, bucketMs);
+}
 function onTick(key, price){
   if(key !== sym) return;
   live.lastPrice = price; live.lastTickAt = Date.now();
   const now = Date.now();
-  if(!live.bucket) live.bucket = {t0: now, o:price, h:price, l:price, c:price};
+  if(!live.bucket) live.bucket = {t0: bucketStart(now), o:price, h:price, l:price, c:price};
   const b = live.bucket;
   b.h = Math.max(b.h, price); b.l = Math.min(b.l, price); b.c = price;
   if(now - b.t0 >= bucketMs){
     live.candles.push({t:b.t0, o:b.o, h:b.h, l:b.l, c:b.c});
     gradeCall(b);
     live.candles = live.candles.slice(-40);
-    live.bucket = {t0: now, o:price, h:price, l:price, c:price};
+    live.bucket = {t0: bucketStart(now), o:price, h:price, l:price, c:price};
   }
   drawCalls();
 }
@@ -119,14 +137,42 @@ function gradeCall(b){
   if(!live.prediction){
     box.className = 'game-result';
     box.innerHTML = `No call locked — the candle closed <b>${dir.toUpperCase()}</b>. Lock a call before the close to score it.`;
+    logJournal({t:Date.now(), sym, call:null, dir, ok:null});
     return;
   }
   const ok = live.prediction === dir;
+  logJournal({t:Date.now(), sym, call:live.prediction, dir, ok});
   record('calls', ok, 40, ok?'Live call hit':'Live call missed');
   box.className = 'game-result ' + (ok?'ok':'bad');
   box.innerHTML = `${ok?'Correct call':'Missed call'} — candle closed <b>${dir.toUpperCase()}</b> (open ${AI.market.fmt(b.o)}, close ${AI.market.fmt(b.c)}).`;
   live.prediction = null;
   [...document.querySelectorAll('[data-dir]')].forEach(x=>x.classList.remove('selected'));
+}
+
+/* ── call journal (rolling decision history, newest first, cap 50) ── */
+function logJournal(entry){
+  if(!Array.isArray(stats.calls.history)) stats.calls.history = [];
+  stats.calls.history.unshift(entry);
+  if(stats.calls.history.length > 50) stats.calls.history.length = 50;
+  save();
+  renderJournal();
+}
+function renderJournal(){
+  const body = $('journalBody');
+  if(!body) return;
+  const h = Array.isArray(stats.calls.history) ? stats.calls.history : [];
+  const cnt = $('journalCount');
+  if(cnt) cnt.textContent = h.length;
+  if(!h.length){
+    body.innerHTML = '<tr><td colspan="4" class="dim">No calls yet — lock UP or DOWN before a candle closes and it lands here.</td></tr>';
+    return;
+  }
+  body.innerHTML = h.map(e=>{
+    const time = new Date(e.t).toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});
+    const call = e.call ? `<b class="${e.call}">${e.call.toUpperCase()}</b>` : '—';
+    const res = e.ok == null ? '—' : (e.ok ? '<b class="up">HIT</b>' : '<b class="down">MISS</b>');
+    return `<tr><td class="mono">${time}</td><td class="mono">${e.sym||''}</td><td>${call}</td><td>${res}</td></tr>`;
+  }).join('');
 }
 function drawCalls(){
   if(live.redrawQueued) return;
@@ -163,6 +209,7 @@ function renderCalls(){
 }
 function startCalls(){
   stopStream();
+  live.anchorPhase = null; // re-anchored from real klines once seedCalls lands
   live.candles = []; live.bucket = null; live.prediction = null;
   renderCalls();
   seedCalls();
@@ -238,8 +285,12 @@ function renderHunt(kl, m, iv){
       [...host.children].forEach(x=>{ x.disabled = true; if(x.textContent.startsWith(m.name)) x.classList.add('correct'); else if(x===b&&!ok) x.classList.add('wrong'); });
       const r = board.querySelector('[data-result]');
       r.className = 'game-result ' + (ok?'ok':'bad');
-      r.innerHTML = `${ok?'Spotted in the wild':'It was'} <b>${m.name}</b> — confidence ${Math.round(m.conf*100)}%. ${pat.see} <span class="dim">${pat.means}</span>`;
-      if(ok){ drawSeries(svg, seg, {title:'REAL CHART — PATTERN MARKED', hlIndex:m.i-offset, mark:true}); }
+      r.innerHTML = `${ok?'Spotted in the wild':'It was'} <b>${m.name}</b> — confidence ${Math.round(m.conf*100)}%. ${pat.see} <span class="dim">${pat.means} Expectation: ${pat.next}</span>`;
+      // reveal what the market actually did next — same real data, no cherry-picking
+      const ext = kl.slice(start, Math.min(kl.length, m.i+9));
+      drawSeries(svg, ext, {title:'WHAT HAPPENED NEXT — REAL CANDLES', hlIndex:m.i-offset, mark:true, markTo:m.i-offset});
+      const cap = board.querySelector('.cap');
+      if(cap) cap.textContent = 'Marked = the verified pattern. Every candle after the line is what actually happened next.';
       record('pattern', ok, 60, ok?'Real pattern spotted':'Real pattern missed');
     });
     host.appendChild(b);
@@ -255,15 +306,22 @@ function drawSeries(svg, candles, opts){
   ctx.scale(lo-padPx, hi+padPx); ctx.grid(7,4);
   ctx.title(opts.title||'REAL CANDLES','dim');
   const n = candles.length;
+  const hotEnd = opts.markTo!=null ? opts.markTo : n-1;
   candles.forEach((k,i)=>{
-    const hot = opts.hlIndex!=null && i >= opts.hlIndex;
-    ctx.candle(ctx.xat(i,n), k.o,k.h,k.l,k.c, undefined, {n, op: hot?1:.78, force: opts.mark&&i>=opts.hlIndex?'accent':undefined});
+    const hot = opts.hlIndex!=null && i >= opts.hlIndex && i <= hotEnd;
+    ctx.candle(ctx.xat(i,n), k.o,k.h,k.l,k.c, undefined, {n, op: hot?1:.78, force: opts.mark&&hot?'accent':undefined});
   });
   if(opts.mark && opts.hlIndex!=null){
-    const x1 = ctx.xat(Math.max(0,opts.hlIndex-1), n) - (ctx.W-ctx.pad.l-ctx.pad.r)/n/2;
-    const x2 = ctx.W - ctx.pad.r + 26;
+    const step = (ctx.W-ctx.pad.l-ctx.pad.r)/n;
+    const x1 = ctx.xat(Math.max(0,opts.hlIndex-1), n) - step/2;
+    const x2 = ctx.xat(hotEnd, n) + step/2;
     ctx.zone(x1, x2, 'accent', .12);
-    ctx.label(ctx.xat(opts.hlIndex, n), ctx.pad.t+10, opts.title.includes('MARKED')?'PATTERN':'', 'accent');
+    ctx.label((x1+x2)/2, ctx.pad.t+10, 'PATTERN', 'accent');
+    if(hotEnd < n-1){
+      const bx = ctx.xat(hotEnd, n) + step/2;
+      ctx.line(bx, ctx.pad.t, bx, 340-ctx.pad.b, 'dim', '5 4', 1.4);
+      ctx.label(bx+34, ctx.pad.t+10, 'AFTER', 'dim');
+    }
   }
   AI.animate(svg, 26);
 }
@@ -366,6 +424,13 @@ AI.onReady = function(){
     bucketMs = parseInt(b.dataset.civ,10)*1000;
     startCalls();
   }));
+  const jc = $('journalClear');
+  if(jc) jc.addEventListener('click', ()=>{
+    stats.calls.history = [];
+    save();
+    renderJournal();
+  });
+  renderJournal();
   $('huntScan').addEventListener('click', hunt);
   $('trendGo').addEventListener('click', trendDrill);
   live.timer = setInterval(()=>{ if(mode==='calls') renderCalls(); }, 1000);

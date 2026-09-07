@@ -5,10 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TheAI101 Academy — Learn to Read Charts, Lesson by Lesson</title>
 <meta name="description" content="A game-like learning path for visual traders: 7 units of chart lessons with boss battles between them, XP and streaks, plus live-market practice with real data. Free, no account.">
+<link rel="canonical" href="https://theai101.shop/academy/">
+<meta property="og:title" content="TheAI101 Academy — Learn to Read Charts, Lesson by Lesson">
+<meta property="og:description" content="A game-like learning path for visual traders: 7 units of chart lessons with boss battles between them, XP and streaks, plus live-market practice with real data. Free, no account.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://theai101.shop/academy/">
+<meta property="og:image" content="https://theai101.shop/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TheAI101 Academy — Learn to Read Charts, Lesson by Lesson">
+<meta name="twitter:description" content="A game-like learning path for visual traders: 7 units of chart lessons with boss battles between them, XP and streaks, plus live-market practice with real data. Free, no account.">
+<meta name="twitter:image" content="https://theai101.shop/og-image.png">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#faf6ee">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#161310">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/site.css?v=2">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Nunito:wght@400;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/site.css?v=3">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'><rect x='2' y='6' width='4' height='7' rx='1' fill='%23e8590c'/><rect x='11' y='3' width='4' height='8' rx='1' fill='%23188a4e'/></svg>">
 </head>
 <body>
@@ -45,6 +61,11 @@
       <b><span id="hudDone">0</span>/<span id="hudTotal">27</span></b>
       <small><span id="hudPlayed">0 rounds</span> · <span id="hudAcc">—</span></small>
     </div>
+    <div class="hud-card">
+      <span>DAY STREAK</span>
+      <b id="hudDays">1</b>
+      <small>days in a row</small>
+    </div>
   </section>
 
   <section id="path" data-reveal>
@@ -53,7 +74,10 @@
         <span class="kicker">The learning path</span>
         <h2>Lessons first, boss games between</h2>
       </div>
-      <button class="btn btn-ghost btn-sm" id="resetArcade">Reset progress</button>
+      <div class="ctrl" style="margin:0">
+        <a class="btn btn-ghost btn-sm" href="/academy/lessons/">Read every lesson as a page →</a>
+        <button class="btn btn-ghost btn-sm" id="resetArcade">Reset progress</button>
+      </div>
     </div>
     <div class="path-map" id="pathMap"></div>
   </section>
@@ -86,6 +110,10 @@
       <a class="btn btn-ghost btn-sm" href="/practice/">Live-market practice →</a>
     </div>
     <div class="game-map" role="list" aria-label="Free play arcade games">
+      <button class="game-card" data-game="review" role="listitem" hidden>
+        <span class="game-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.4"/><path d="M3 4v5h5"/></svg></span>
+        <b>Review queue</b><small>The rounds you missed come back until you clear each one twice.</small><em><span id="reviewCount">0</span> · +30 XP</em>
+      </button>
       <button class="game-card" data-game="builder" role="listitem">
         <span class="game-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="3" x2="8" y2="21"/><rect x="5" y="8" width="6" height="8" rx="1.5"/><line x1="16" y1="4" x2="16" y2="20"/><rect x="13" y="6" width="6" height="9" rx="1.5"/></svg></span>
         <b>Candle Builder</b><small>Watch a candle form, then read what it says.</small><em>Anatomy · +20 XP</em>
@@ -125,12 +153,14 @@
   </section>
 </main>
 
-<script src="/js/candles.js?v=2"></script>
-<script src="/js/patterns-data.js?v=2"></script>
-<script src="/js/market.js?v=2"></script>
-<script src="/js/pattern-detector.js?v=2"></script>
-<script src="/js/app.js?v=2"></script>
-<script src="/js/academy.js?v=2"></script>
+<script src="/js/candles.js?v=3"></script>
+<script src="/js/patterns-data.js?v=3"></script>
+<script src="/js/curriculum.js?v=3"></script>
+<script src="/js/market.js?v=3"></script>
+<script src="/js/pattern-detector.js?v=3"></script>
+<script src="/js/config.js?v=3"></script>
+<script src="/js/app.js?v=3"></script>
+<script src="/js/academy.js?v=3"></script>
 <script>
 (function(){
   // "Continue" jumps to the first unfinished (unlocked) lesson

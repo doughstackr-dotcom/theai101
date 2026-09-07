@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pro Labs — Options Payoff, Binary Math, Risk of Ruin — TheAI101</title>
+<meta name="description" content="Interactive labs that connect the markets explainers to practice: build options payoff diagrams, see the win rate binary payouts demand, and simulate risk of ruin. Free, no account.">
+<link rel="canonical" href="https://theai101.shop/prolab/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TheAI101">
+<meta property="og:title" content="Pro Labs — Options Payoff, Binary Math, Risk of Ruin">
+<meta property="og:description" content="Interactive labs that connect the markets explainers to practice: build options payoff diagrams, see the win rate binary payouts demand, and simulate risk of ruin. Free, no account.">
+<meta property="og:url" content="https://theai101.shop/prolab/">
+<meta property="og:image" content="https://theai101.shop/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Pro Labs — Options Payoff, Binary Math, Risk of Ruin">
+<meta name="twitter:description" content="Build options payoff diagrams, see the win rate binary payouts demand, and simulate risk of ruin across 200 accounts. Free, no account.">
+<meta name="twitter:image" content="https://theai101.shop/og-image.png">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#faf6ee">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#161310">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Nunito:wght@400;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/site.css?v=3">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'><rect x='2' y='6' width='4' height='7' rx='1' fill='%23e8590c'/><rect x='11' y='3' width='4' height='8' rx='1' fill='%23188a4e'/></svg>">
+</head>
+<body>
+
+<main class="wrap">
+
+  <section class="hero" data-reveal>
+    <span class="kicker">Pro labs</span>
+    <h1>Where the market pages<br>get <span class="o">hands-on.</span></h1>
+    <p class="lead">Three labs that turn the explainers into numbers you can drag: build the payoff diagram for four long-side options structures, see the win rate binary payouts quietly demand, and run 200 simulated accounts to learn why position sizing — not prediction — decides who survives. Educational math only, free, no account.</p>
+    <div class="ctrl">
+      <a class="btn btn-primary" href="#payoffLab">Payoff puzzle</a>
+      <a class="btn btn-ghost" href="#binaryLab">Binary math</a>
+      <a class="btn btn-ghost" href="#tycoonLab">Risk of ruin</a>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── LAB A: options payoff puzzle ── -->
+  <section class="panel" id="payoffLab" style="scroll-margin-top:110px" data-reveal>
+    <div class="game-shell-head">
+      <div>
+        <span class="badge">Lab 01 · Payoff</span>
+        <h2>Options Payoff Puzzle</h2>
+        <p class="lead" style="font-size:1rem">Pick a structure, drag the strikes and premium, and watch the profit-and-loss line at expiry take shape. The spot reference is fixed at 100 — everything else is yours to bend.</p>
+      </div>
+      <div class="ctrl" style="margin:0">
+        <span class="chip neut">Spot 100</span>
+        <a class="btn btn-ghost btn-sm" href="/markets/options.html">Options explainer</a>
+      </div>
+    </div>
+    <div class="play-grid" style="margin-top:1rem">
+      <div class="chart-frame">
+        <svg id="paySvg" viewBox="0 0 720 300" role="img" aria-label="Options payoff at expiry chart"></svg>
+        <div class="cap" id="payCap"></div>
+      </div>
+      <div class="mission-card">
+        <span class="badge">Build the trade</span>
+        <div style="margin-top:.55rem">
+          <div class="slider-row"><label for="payK">Strike</label><input type="range" id="payK" min="60" max="140" step="1" value="100"><output id="payKV">$100</output></div>
+          <div class="slider-row" id="payK2Row" hidden><label for="payK2">Upper strike</label><input type="range" id="payK2" min="60" max="140" step="1" value="115"><output id="payK2V">$115</output></div>
+          <div class="slider-row"><label for="payPrem" id="payPremLabel">Premium</label><input type="range" id="payPrem" min="1" max="20" step="1" value="6"><output id="payPremV">$6.00</output></div>
+        </div>
+        <hr style="border:0;border-top:2px solid var(--line);margin:1rem 0">
+        <span class="badge">Read the shape</span>
+        <h3 id="payName">Long call</h3>
+        <div class="pat-facts" id="payFacts"></div>
+      </div>
+    </div>
+    <div class="ctrl">
+      <div class="tgl" id="payTgl" aria-label="Options structure">
+        <button type="button" class="on" data-v="long_call">Long Call</button>
+        <button type="button" data-v="long_put">Long Put</button>
+        <button type="button" data-v="bull_spread">Bull Call Spread</button>
+        <button type="button" data-v="bear_spread">Bear Put Spread</button>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── LAB B: binary breakeven ── -->
+  <section class="panel" id="binaryLab" style="scroll-margin-top:110px" data-reveal>
+    <div class="game-shell-head">
+      <div>
+        <span class="badge">Lab 02 · Binary math</span>
+        <h2>Binary Breakeven Lab</h2>
+        <p class="lead" style="font-size:1rem">A binary option pays a fixed percent of your stake when you are right and takes the whole stake when you are wrong. Drag the payout and your win rate — the math decides the verdict, instantly.</p>
+      </div>
+      <a class="btn btn-ghost btn-sm" href="/markets/binary.html">Binary explainer</a>
+    </div>
+    <div class="play-grid" style="margin-top:1rem">
+      <div class="mission-card">
+        <span class="badge">Set the terms</span>
+        <h3>Your binary contract</h3>
+        <div class="slider-row"><label for="binPay">Payout %</label><input type="range" id="binPay" min="10" max="95" step="1" value="80"><output id="binPayV">80%</output></div>
+        <div class="slider-row"><label for="binWr">Win rate %</label><input type="range" id="binWr" min="30" max="90" step="1" value="50"><output id="binWrV">50%</output></div>
+        <p class="small dim" style="margin-top:.7rem">Stake is fixed at $1 per trade. EV = win rate × payout − loss rate.</p>
+      </div>
+      <div>
+        <div class="game-result" id="binVerdict">Drag a slider to put your contract on trial.</div>
+        <div class="note"><b>The wall to climb:</b> at the typical 80% payout you must win 55.6% of trades just to break even. "50/50" is not a neutral coin flip — it is a slow bleed of about $5 per $100 staked.</div>
+      </div>
+    </div>
+    <div class="hud-strip">
+      <div class="hud-card"><span>EV per $1 staked</span><b id="binEv">—</b><small>expected result per trade</small></div>
+      <div class="hud-card"><span>Break-even win rate</span><b id="binBe">—</b><small>100 ÷ (1 + payout)</small></div>
+      <div class="hud-card"><span>Your win rate</span><b id="binWrHud">—</b><small>what you actually hit</small></div>
+      <div class="hud-card"><span>Gap to break-even</span><b id="binGap">—</b><small>edge or shortfall, in points</small></div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── LAB C: Portfolio Tycoon ── -->
+  <section class="panel" id="tycoonLab" style="scroll-margin-top:110px" data-reveal>
+    <div class="game-shell-head">
+      <div>
+        <span class="badge">Lab 03 · Risk of ruin</span>
+        <h2>Portfolio Tycoon</h2>
+        <p class="lead" style="font-size:1rem">200 simulated accounts, 100 trades each, identical rules. Every account starts at $10,000 and risks a fixed slice of its current equity per trade. Same trades, different luck — watch what sizing does to the spread of outcomes.</p>
+      </div>
+      <a class="btn btn-ghost btn-sm" href="/academy/#u6l3">Lesson: the 1% rule</a>
+    </div>
+    <div class="play-grid" style="margin-top:1rem">
+      <div class="chart-frame">
+        <svg id="tySvg" viewBox="0 0 720 300" role="img" aria-label="Simulated equity curves"></svg>
+        <div class="lab-legend" aria-hidden="true">
+          <span><i style="border-top-color:var(--accent)"></i>Account 1</span>
+          <span><i style="border-top-color:var(--green-hi)"></i>Account 2</span>
+          <span><i style="border-top-color:var(--red-hi)"></i>Account 3</span>
+          <span><i style="border-top-color:var(--yellow)"></i>Account 4</span>
+          <span><i style="border-top-color:var(--blue)"></i>Account 5</span>
+        </div>
+        <div class="cap" id="tyCap">Press run to deal out 200 accounts.</div>
+      </div>
+      <div class="mission-card">
+        <span class="badge">Dial the risk</span>
+        <h3>Every account plays by the same rules</h3>
+        <div class="slider-row"><label for="tyRisk">Risk / trade</label><input type="range" id="tyRisk" min="0.5" max="10" step="0.5" value="2"><output id="tyRiskV">2.0%</output></div>
+        <div class="slider-row"><label for="tyWr">Win rate</label><input type="range" id="tyWr" min="30" max="60" step="1" value="45"><output id="tyWrV">45%</output></div>
+        <div class="slider-row"><label for="tyR">Avg win</label><input type="range" id="tyR" min="0.5" max="3" step="0.25" value="1.8"><output id="tyRV">+1.8R</output></div>
+        <button type="button" class="btn btn-primary" id="tyRun" style="width:100%;justify-content:center;margin-top:.7rem">Run 200 accounts × 100 trades</button>
+        <p class="small dim" style="margin-top:.7rem">Wins pay the R multiple on the amount risked; losses always cost 1R. Red dashed line: the 50% drawdown graveyard. Run again after changing the sliders.</p>
+      </div>
+    </div>
+    <div class="hud-strip">
+      <div class="hud-card"><span>Median end</span><b id="tyMed">—</b><small id="tyMedS">run the sim</small></div>
+      <div class="hud-card"><span>Best account</span><b id="tyBest">—</b><small id="tyBestS">the lucky tail</small></div>
+      <div class="hud-card"><span>Worst account</span><b id="tyWorst">—</b><small id="tyWorstS">the other tail</small></div>
+      <div class="hud-card"><span>Fell below 50%</span><b id="tyRuin">—</b><small id="tyRuinS">accounts that visited the graveyard</small></div>
+    </div>
+    <p class="small" style="margin-top:.9rem">Raising risk per trade raises the ceiling and the graveyard. Same entries, same win rate — sizing only decides how deep a losing streak digs and whether you last long enough to recover. That is why the <a href="/academy/#u6l3">1% rule</a> comes before every other skill.</p>
+  </section>
+
+  <hr class="divider">
+
+  <div class="warn"><b>Educational math only.</b> These labs ignore fees, slippage, margin and taxes; real trading adds all four. Nothing here is financial advice.</div>
+
+</main>
+
+<script src="/js/candles.js?v=3"></script>
+<script src="/js/market.js?v=3"></script>
+<script src="/js/config.js?v=3"></script>
+<script src="/js/app.js?v=3"></script>
+<script src="/js/prolab.js?v=3"></script>
+</body>
+</html>

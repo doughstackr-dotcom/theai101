@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Candlestick Patterns Cheat Sheet (Printable) — TheAI101</title>
+<meta name="description" content="A free one-page printable cheat sheet of the 14 essential candlestick patterns: what each looks like, its bias, and how it fails. Print it or save it as a PDF.">
+<link rel="canonical" href="https://theai101.shop/cheatsheet/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TheAI101">
+<meta property="og:title" content="Candlestick Patterns Cheat Sheet (Printable) — TheAI101">
+<meta property="og:description" content="A free one-page printable cheat sheet of the 14 essential candlestick patterns: what each looks like, its bias, and how it fails. Print it or save it as a PDF.">
+<meta property="og:url" content="https://theai101.shop/cheatsheet/">
+<meta property="og:image" content="https://theai101.shop/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Candlestick Patterns Cheat Sheet (Printable) — TheAI101">
+<meta name="twitter:description" content="A free one-page printable cheat sheet of the 14 essential candlestick patterns: what each looks like, its bias, and how it fails. Print it or save it as a PDF.">
+<meta name="twitter:image" content="https://theai101.shop/og-image.png">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#faf6ee">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#161310">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Nunito:wght@400;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/site.css?v=3">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'><rect x='2' y='6' width='4' height='7' rx='1' fill='%23e8590c'/><rect x='11' y='3' width='4' height='8' rx='1' fill='%23188a4e'/></svg>">
+<style>
+/* ── screen ─────────────────────────────────────────── */
+.cs-wrap{max-width:1080px;margin:0 auto;padding:1.4rem 1rem 3rem}
+.no-print{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.2rem}
+.no-print p{flex:1 1 22rem;margin:0;color:var(--ink-2);font-size:.95rem}
+.no-print .ctrl{margin:0}
+#sheet{background:#fff;border:2px solid var(--ink);border-radius:14px;padding:1.4rem 1.4rem 1rem;box-shadow:var(--shadow);color:#111}
+.cs-head{display:flex;align-items:baseline;gap:.7rem;flex-wrap:wrap;border-bottom:2px solid #211d16;padding-bottom:.6rem;margin-bottom:1.1rem}
+.cs-mark{font-family:var(--disp);font-weight:800;font-size:1.35rem;letter-spacing:-.02em;color:#111}
+.cs-title{font-family:var(--sans);font-weight:800;font-size:1.02rem;color:#111}
+.cs-url{margin-left:auto;font-family:var(--mono);font-size:.78rem;color:#5c5647}
+#csGrid{display:grid;grid-template-columns:1fr;gap:.8rem}
+@media(min-width:620px){#csGrid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:980px){#csGrid{grid-template-columns:repeat(3,1fr);gap:1rem}}
+.pc{border:1px solid #211d16;border-radius:6px;padding:4px;background:#fff;color:#111;display:flex;flex-direction:column;gap:3px}
+.pc-head{display:flex;align-items:center;justify-content:space-between;gap:.4rem}
+.pc-name{font-size:.92rem;font-weight:800;color:#111;line-height:1.15}
+.pc .chip{flex:none;font-size:.62rem;padding:.06rem .4rem;box-shadow:none}
+.pc svg{width:100%;height:auto;display:block;background:#fff}
+.pc-see{font-size:.82rem;line-height:1.35;color:#3a352b;margin:0}
+.cs-foot{font-family:var(--mono);font-size:.72rem;color:#5c5647;text-align:center;margin-top:1.1rem;border-top:1px solid #d8d2c4;padding-top:.5rem}
+
+/* ── print: one A4 portrait page ────────────────────── */
+@page{size:A4 portrait;margin:9mm}
+@media print{
+  .no-print{display:none!important}
+  html,body{background:#fff!important;color:#111!important}
+  body{margin:0!important;padding:0!important;overflow:visible!important}
+  .cs-wrap{max-width:none;margin:0;padding:0}
+  #sheet{border:0;border-radius:0;padding:0;box-shadow:none;background:#fff}
+  .cs-head{gap:2mm;border-bottom:1.5pt solid #211d16;padding-bottom:1.2mm;margin-bottom:2mm}
+  .cs-mark{font-size:12pt}
+  .cs-title{font-size:9.5pt}
+  .cs-url{font-size:7pt}
+  #csGrid{grid-template-columns:repeat(4,1fr);gap:2mm}
+  .pc{break-inside:avoid;page-break-inside:avoid;box-shadow:none;padding:4px;border:1px solid #211d16;border-radius:6px;background:#fff;color:#111}
+  .pc-name{font-size:8.5pt}
+  .pc .chip{font-size:6.5pt;padding:0 3px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pc svg{height:20mm;margin:.4mm 0}
+  .pc-see{font-size:8pt;line-height:1.28}
+  .cs-foot{font-size:6.5pt;margin-top:1.8mm;border-top:.5pt solid #b9b2a2;padding-top:.8mm}
+}
+</style>
+</head>
+<body>
+
+<div class="cs-wrap">
+
+  <div class="no-print">
+    <p>The 14 essential candlestick patterns on one printable A4 page — the chart, its bias, and the one-line read. Print it, tape it above your desk.</p>
+    <div class="ctrl">
+      <button class="btn btn-primary" type="button" onclick="window.print()">Print / Save as PDF</button>
+      <a class="btn btn-ghost" href="/candles/patterns.html">Interactive pattern explorer →</a>
+    </div>
+  </div>
+
+  <section id="sheet" aria-label="Candlestick patterns cheat sheet">
+    <header class="cs-head">
+      <span class="cs-mark">TheAI101</span>
+      <h1 class="cs-title">Candlestick Patterns — Cheat Sheet</h1>
+      <span class="cs-url">https://theai101.shop</span>
+    </header>
+
+    <div id="csGrid"></div>
+
+    <p class="cs-foot">Educational only — not financial advice. theai101.shop</p>
+  </section>
+
+</div>
+
+<script src="/js/candles.js?v=3"></script>
+<script src="/js/patterns-data.js?v=3"></script>
+<script>
+(function(){
+'use strict';
+/* Trim pat.see to ~110 chars, ending cleanly at a word boundary. */
+function trimSee(s){
+  s = String(s || '').trim();
+  if(s.length <= 110) return s;
+  var cut = s.slice(0, 110);
+  var sp = cut.lastIndexOf(' ');
+  if(sp > 40) cut = cut.slice(0, sp);
+  return cut.replace(/[\s,;:.\u2014-]+$/, '') + '\u2026';
+}
+document.addEventListener('DOMContentLoaded', function(){
+  var host = document.getElementById('csGrid');
+  var pats = (window.AI && window.AI.candles) || [];
+  var PAD = {l:10, r:10, t:12, b:10};
+  pats.forEach(function(pat){
+    var chip = pat.bias === 'Bullish' ? 'bull' : pat.bias === 'Bearish' ? 'bear' : 'neut';
+    var card = document.createElement('article');
+    card.className = 'pc';
+    var head = document.createElement('div');
+    head.className = 'pc-head';
+    var nm = document.createElement('b');
+    nm.className = 'pc-name';
+    nm.textContent = pat.name;
+    var ch = document.createElement('span');
+    ch.className = 'chip ' + chip;
+    ch.textContent = pat.bias;
+    head.appendChild(nm);
+    head.appendChild(ch);
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 300 120');
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', pat.name + ' candlestick pattern diagram');
+    var see = document.createElement('p');
+    see.className = 'pc-see';
+    see.textContent = trimSee(pat.see);
+    card.appendChild(head);
+    card.appendChild(svg);
+    card.appendChild(see);
+    host.appendChild(card);
+    var ctx = AI.add(svg, 300, 120, PAD);
+    ctx.scale(0, 100);
+    pat.draw(ctx, 300, 120, PAD);   /* static render — no grid, no animation */
+  });
+});
+})();
+</script>
+</body>
+</html>

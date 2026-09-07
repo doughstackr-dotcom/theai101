@@ -88,6 +88,11 @@ AI.add = function(sel, W, H, pad){
         t.textContent = label; el.appendChild(t);
       }
     },
+    label(x,y,txt,color,anchor){
+      const t = mk('text',{x,y, fill:resolve(color||'dim'), 'font-size':10, 'font-weight':700,
+        'font-family':"JetBrains Mono,Consolas,monospace", 'text-anchor':anchor||'middle'});
+      t.textContent = txt; el.appendChild(t); return t;
+    },
     priceRight(y, txt, color){ ctx.hline(y, color, txt); },
     zone(x1, x2, color, opacity){
       el.appendChild(mk('rect',{x:x1, y:pad.t, width:Math.max(0,x2-x1), height:H-pad.t-pad.b,

@@ -7,9 +7,29 @@
 <meta name="description" content="Practice reading real markets: predict live candles, hunt algorithmically-verified patterns in real exchange data, and classify trends. Free, keyless public market feeds, no account, no real money.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/site.css?v=2">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Nunito:wght@400;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/site.css?v=3">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'><rect x='2' y='6' width='4' height='7' rx='1' fill='%23e8590c'/><rect x='11' y='3' width='4' height='8' rx='1' fill='%23188a4e'/></svg>">
+<link rel="canonical" href="https://theai101.shop/practice/">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="theme-color" content="#faf6ee" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161310" media="(prefers-color-scheme: dark)">
+<meta property="og:title" content="Live Practice Arena — Real Market Data, Zero Real Money — TheAI101">
+<meta property="og:description" content="Practice reading real markets: predict live candles, hunt algorithmically-verified patterns in real exchange data, and classify trends. Free, keyless public market feeds, no account, no real money.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://theai101.shop/practice/">
+<meta property="og:image" content="https://theai101.shop/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Live Practice Arena — Real Market Data, Zero Real Money — TheAI101">
+<meta name="twitter:description" content="Practice reading real markets: predict live candles, hunt algorithmically-verified patterns in real exchange data, and classify trends. Free, keyless public market feeds, no account, no real money.">
+<meta name="twitter:image" content="https://theai101.shop/og-image.png">
+<style>
+  .journal{margin-top:.9rem}
+  .journal summary{cursor:pointer;font-weight:800}
+  .journal table{width:100%;border-collapse:collapse;margin-top:.5rem}
+  .journal th,.journal td{text-align:left;padding:.18rem .6rem .18rem 0;border-bottom:1px solid var(--line,rgba(125,110,90,.18))}
+</style>
 </head>
 <body>
 <main class="wrap">
@@ -77,7 +97,15 @@
           </div>
           <div class="game-result" id="callsResult">Read the tape, lock a call, and let the close grade you.</div>
           <div class="game-result" id="callsErr" hidden style="margin-top:.6rem">Feed unreachable on this network — both public sources failed. Retrying happens automatically when you switch symbol.</div>
-          <p class="small dim" style="margin-top:.8rem">Practice candles are short slices of the live feed so rounds land in seconds, not minutes. Prices are real and in sync with the exchange.</p>
+          <details class="journal">
+            <summary class="small">Call journal (<span id="journalCount">0</span>)</summary>
+            <table class="small">
+              <thead><tr><th scope="col">Time</th><th scope="col">Symbol</th><th scope="col">Call</th><th scope="col">Result</th></tr></thead>
+              <tbody id="journalBody"></tbody>
+            </table>
+            <div style="margin-top:.6rem"><button type="button" class="btn btn-ghost btn-sm" id="journalClear">Clear journal</button></div>
+          </details>
+          <p class="small dim" style="margin-top:.8rem">Practice candles are short slices of the live feed so rounds land in seconds, not minutes. Prices are real and in sync with the exchange. Prices are live exchange prices from free public feeds (Binance, Coinbase backup); your broker's feed (e.g. Pocket Option) will differ slightly — practice trains the reading skill, not the exact ticks.</p>
         </div>
       </div>
     </div>
@@ -143,15 +171,17 @@
 
   <section class="warn" data-reveal>
     <b>Practice only.</b> The arena never accepts deposits and never places orders. Market data comes from free public exchange feeds for education; it can pause or lag on some networks. Nothing here is financial advice.
+    <b>Data source:</b> free public exchange APIs (Binance primary, Coinbase failover). Nothing is sponsored; no account or key is involved.
   </section>
 </main>
 
-<script src="/js/candles.js?v=2"></script>
-<script src="/js/patterns-data.js?v=2"></script>
-<script src="/js/market.js?v=2"></script>
-<script src="/js/pattern-detector.js?v=2"></script>
-<script src="/js/app.js?v=2"></script>
-<script src="/js/practice.js?v=2"></script>
+<script src="/js/candles.js?v=3"></script>
+<script src="/js/patterns-data.js?v=3"></script>
+<script src="/js/market.js?v=3"></script>
+<script src="/js/pattern-detector.js?v=3"></script>
+<script src="/js/config.js?v=3"></script>
+<script src="/js/app.js?v=3"></script>
+<script src="/js/practice.js?v=3"></script>
 <script>
 // interval toggles for the two drill panels
 (function(){

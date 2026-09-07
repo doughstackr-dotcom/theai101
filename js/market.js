@@ -4,7 +4,9 @@
    Exchange public feed (REST candles + WS ticker). Last resort:
    REST polling. One shared connection multiplexes every subscriber;
    blocked sources are remembered and skipped. Status is always
-   shown honestly in the UI ('live', 'syncing', 'offline').
+   shown honestly in the UI ('live', 'syncing', 'offline'). When the
+   browser supports BroadcastChannel, tabs elect a single leader that
+   runs the feed and shares prices with the other tabs.
    ═══════════════════════════════════════════════════════════════ */
 (function(){
 'use strict';
@@ -23,7 +25,7 @@ market.intervals = {'1m':1,'5m':5,'15m':15};
 
 const prices = {};
 const bus = {
-  refs:0, ws:null, pollTimer:null, source:'none', status:'idle',
+  refs:0, ws:null, pollTimer:null, source:'none', status:'idle', follower:false,
   binanceWSBlocked:false, binanceRestBlocked:false, cbWSBlocked:false,
   handlers:new Set(), statusFns:new Set(), attempts:0
 };
@@ -41,6 +43,7 @@ function dispatch(key, p){
   if(!Number.isFinite(p) || p<=0) return;
   prices[key] = p;
   bus.handlers.forEach(h=>{ if(!h.keys || h.keys.has(key)) h.onPrice && h.onPrice(key, p); });
+  if(leaderActive) chanPost({t:'price', key, p});   // share with follower tabs
 }
 
 /* ── REST klines with failover. Returns [{t,o,h,l,c,v}] ascending ── */
@@ -167,6 +170,127 @@ function stopBus(){
   setStatus('idle');
 }
 
+/* ── cross-tab sharing: one tab leads the live feed, others listen ──
+   Protocol over BroadcastChannel('theai101-market'):
+   hello  — "any leader out there?"           present — leader's answer
+   price  — leader -> followers price update  bye     — a tab is leaving
+   The first subscribing tab runs a 400ms election; if a leader answers
+   it follows (and takes over if the leader goes quiet), otherwise it
+   leads and answers future hellos. Channel errors never break prices. */
+const TAB_ID = 't' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+let chan = null;           // BroadcastChannel once opened
+let electionTimer = null;  // 'hello' collection window
+let followerWatch = null;  // 12s "no price from leader" watchdog
+let byeTimer = null;       // jittered re-election after a leader leaves
+let electionWait = false;  // true while collecting 'present' replies
+let sawPresent = false;    // a leader answered our 'hello'
+let leaderActive = false;  // this tab runs the feed and answers hellos
+
+function chanPost(msg){
+  if(!chan) return;
+  try{ chan.postMessage(msg); }catch(_e){}
+}
+function armFollowerWatch(){
+  if(followerWatch) clearTimeout(followerWatch);
+  followerWatch = setTimeout(followerStalled, 12000);
+}
+function clearChanTimers(){
+  if(electionTimer){ clearTimeout(electionTimer); electionTimer=null; }
+  if(followerWatch){ clearTimeout(followerWatch); followerWatch=null; }
+  if(byeTimer){ clearTimeout(byeTimer); byeTimer=null; }
+  electionWait = false;
+}
+function stopFollowerMode(){
+  bus.follower = false;
+  if(followerWatch){ clearTimeout(followerWatch); followerWatch=null; }
+}
+function startElection(){
+  if(!chan) return;
+  sawPresent = false;
+  electionWait = true;
+  chanPost({t:'hello', id:TAB_ID});
+  if(electionTimer) clearTimeout(electionTimer);
+  electionTimer = setTimeout(()=>{
+    electionTimer = null; electionWait = false;
+    if(bus.refs<=0){ stopFeed(); return; }
+    if(sawPresent){                       // another tab leads — listen to it
+      leaderActive = false;
+      bus.follower = true;
+      if(bus.status !== 'syncing') setStatus('syncing');
+      armFollowerWatch();
+    }else{                                // no leader — run the feed here
+      bus.follower = false;
+      leaderActive = true;
+      startBus();
+    }
+  }, 400);
+}
+function followerStalled(){
+  followerWatch = null;
+  if(bus.refs<=0 || !bus.follower) return;
+  bus.follower = false;                   // leader went quiet — re-elect
+  startElection();
+}
+function onChanMsg(ev){
+  try{
+    const m = ev && ev.data;
+    if(!m || typeof m !== 'object' || m.id === TAB_ID) return;  // never react to ourselves
+    if(m.t === 'hello'){
+      if(leaderActive) chanPost({t:'present', id:TAB_ID});
+    }else if(m.t === 'present'){
+      if(electionWait) sawPresent = true;
+    }else if(m.t === 'price'){
+      if(bus.follower && market.byKey[m.key] && Number.isFinite(m.p) && m.p>0){
+        if(bus.status !== 'live') setStatus('live');
+        dispatch(m.key, m.p);
+        armFollowerWatch();
+      }
+    }else if(m.t === 'bye'){
+      if(bus.follower && !byeTimer){      // leader left — re-elect, staggered
+        stopFollowerMode();
+        if(bus.status === 'live') setStatus('syncing');
+        byeTimer = setTimeout(()=>{
+          byeTimer = null;
+          if(bus.refs>0 && chan && !bus.follower && !leaderActive) startElection();
+        }, 250 + Math.random()*250);
+      }
+    }
+  }catch(_e){}
+}
+function onPageHide(){ chanPost({t:'bye', id:TAB_ID}); }
+function onPageShow(ev){
+  if(!chan || !ev || !ev.persisted || bus.refs<=0) return;
+  if(leaderActive){ leaderActive = false; stopBus(); }   // bfcache restore:
+  stopFollowerMode();                                    // our role may be stale
+  startElection();
+}
+function startFeed(){
+  if(bus.follower || leaderActive || chan) return;        // already organized
+  if(typeof BroadcastChannel === 'undefined'){ startBus(); return; }
+  try{
+    chan = new BroadcastChannel('theai101-market');
+    chan.onmessage = onChanMsg;
+  }catch(_e){ chan = null; startBus(); return; }
+  try{ window.addEventListener('pagehide', onPageHide); }catch(_e){}
+  try{ window.addEventListener('pageshow', onPageShow); }catch(_e){}
+  startElection();
+}
+function stopFeed(){
+  const wasLeader = leaderActive;
+  clearChanTimers();
+  leaderActive = false;
+  bus.follower = false;
+  if(chan){
+    chanPost({t:'bye', id:TAB_ID});
+    try{ chan.close(); }catch(_e){}
+    chan = null;
+  }
+  try{ window.removeEventListener('pagehide', onPageHide); }catch(_e){}
+  try{ window.removeEventListener('pageshow', onPageShow); }catch(_e){}
+  if(wasLeader) stopBus();
+  else { bus.source='none'; setStatus('idle'); }
+}
+
 /* subscribe(keys, {onPrice(key, price)}) -> {close()} */
 market.subscribe = function(keys, handlers){
   const h = {keys:new Set(keys), onPrice:handlers && handlers.onPrice};
@@ -174,11 +298,11 @@ market.subscribe = function(keys, handlers){
   bus.refs++;
   // catch new subscribers up with the freshest prices immediately
   if(h.onPrice) keys.forEach(k=>{ if(prices[k]) h.onPrice(k, prices[k]); });
-  startBus();
+  startFeed();
   return { close(){
     bus.handlers.delete(h);
     bus.refs = Math.max(0, bus.refs-1);
-    if(bus.refs===0) stopBus();
+    if(bus.refs===0) stopFeed();
   }};
 };
 

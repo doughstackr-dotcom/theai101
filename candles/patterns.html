@@ -5,34 +5,88 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Candlestick Pattern Explorer — TheAI101</title>
 <meta name="description" content="14 candlestick patterns animated and explained: what you see, what it means, how to trade it, and when it fails. Toggle the entry, stop and target right on the chart.">
+<link rel="canonical" href="https://theai101.shop/candles/patterns.html">
+<meta property="og:title" content="Candlestick Pattern Explorer — TheAI101">
+<meta property="og:description" content="14 candlestick patterns animated and explained: what you see, what it means, how to trade it, and when it fails. Toggle the entry, stop and target right on the chart.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://theai101.shop/candles/patterns.html">
+<meta property="og:image" content="https://theai101.shop/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Candlestick Pattern Explorer — TheAI101">
+<meta name="twitter:description" content="14 candlestick patterns animated and explained: what you see, what it means, how to trade it, and when it fails. Toggle the entry, stop and target right on the chart.">
+<meta name="twitter:image" content="https://theai101.shop/og-image.png">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#faf6ee">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#161310">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a bullish engulfing pattern?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A two-candle bullish reversal pattern: a small red candle is fully swallowed by a larger green body after a decline. It is strongest when it forms at support."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When does a hammer pattern fail?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Without a prior downtrend a hammer is just noise. A close back near the low, or a later break of the wick low, kills the signal."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does a doji candle mean?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The open equals the close: indecision. Trade the break of the doji, not the candle itself."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do you trade a shooting star?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "After an uptrend, enter below its low with a stop above the wick high, and confirm with the next candle."
+      }
+    }
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/site.css?v=2">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Nunito:wght@400;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/site.css?v=3">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'><rect x='2' y='6' width='4' height='7' rx='1' fill='%23e8590c'/><rect x='11' y='3' width='4' height='8' rx='1' fill='%23188a4e'/></svg>">
 <style>
 .explorer{display:grid;grid-template-columns:250px 1fr;gap:1.25rem;align-items:start}
 @media(max-width:900px){.explorer{grid-template-columns:1fr}}
 .pat-list{display:flex;flex-direction:column;gap:.25rem;position:sticky;top:86px;max-height:calc(100vh - 110px);overflow:auto;
-  background:rgba(10,14,23,.55);backdrop-filter:blur(18px) saturate(165%);-webkit-backdrop-filter:blur(18px) saturate(165%);
-  border:1px solid rgba(255,255,255,.085);border-radius:16px;padding:.5rem;
-  box-shadow:0 14px 34px -14px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.055)}
+  background:var(--paper-2);border:2px solid var(--ink);border-radius:16px;padding:.5rem;box-shadow:var(--shadow-sm)}
 .pat-list::-webkit-scrollbar{width:6px}
-.pat-list button{background:transparent;border:1px solid transparent;border-radius:9px;color:var(--muted);text-align:left;padding:.45rem .6rem;cursor:pointer;font-size:.88rem;display:flex;justify-content:space-between;align-items:center;font-family:var(--sans)}
-.pat-list button:hover{background:rgba(255,255,255,.07);color:var(--text)}
-.pat-list button.sel{background:rgba(34,197,94,.13);border-color:rgba(34,197,94,.32);color:var(--text)}
-.pat-list .dot{width:7px;height:7px;border-radius:99px;flex:none;box-shadow:0 0 8px currentColor}
-.bigchart{background:rgba(10,14,23,.55);backdrop-filter:blur(18px) saturate(165%);-webkit-backdrop-filter:blur(18px) saturate(165%);
-  border:1px solid rgba(255,255,255,.085);border-radius:18px;padding:1rem;
-  box-shadow:0 18px 42px -14px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.055)}
+.pat-list button{background:transparent;border:2px solid transparent;border-radius:10px;color:var(--ink-2);text-align:left;padding:.45rem .6rem;cursor:pointer;font-size:.88rem;font-weight:700;display:flex;justify-content:space-between;align-items:center;font-family:var(--sans)}
+.pat-list button:hover{background:var(--paper-3);color:var(--ink)}
+.pat-list button.sel{background:var(--yellow-soft);border-color:var(--ink);color:var(--ink);box-shadow:2px 2px 0 var(--ink)}
+.pat-list .dot{width:8px;height:8px;border-radius:99px;flex:none;border:1.5px solid var(--ink)}
+.bigchart{background:var(--paper-2);border:2px solid var(--ink);border-radius:18px;padding:1rem;box-shadow:var(--shadow-sm)}
 .bigchart svg{width:100%;height:auto;display:block}
 .facts4{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.8rem;margin-top:1rem}
-.facts4 .card h4{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin:0 0 .4rem}
+.facts4 .card h4{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;color:var(--accent-deep);margin:0 0 .4rem}
+html[data-theme="dark"] .facts4 .card h4{color:var(--accent)}
 .facts4 .card p{font-size:.9rem;margin:0}
 .calc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.7rem;margin:.6rem 0}
-.calc-grid label{font-family:var(--mono);font-size:.72rem;color:var(--muted);display:block;margin-bottom:.25rem}
-.calc-grid input{width:100%;background:rgba(0,0,0,.32);border:1px solid rgba(255,255,255,.14);color:var(--text);border-radius:9px;padding:.5rem .6rem;font-family:var(--mono);font-size:.9rem;transition:border-color .15s}
-.calc-grid input:focus{border-color:rgba(34,197,94,.55);outline:none;box-shadow:0 0 0 3px rgba(34,197,94,.12)}
+.calc-grid label{font-family:var(--mono);font-size:.72rem;color:var(--ink-2);display:block;margin-bottom:.25rem}
+.calc-grid input{width:100%;background:var(--paper-3);border:2px solid var(--ink);color:var(--ink);border-radius:10px;padding:.5rem .6rem;font-family:var(--mono);font-size:.9rem;transition:box-shadow .15s}
+.calc-grid input:focus{outline:none;box-shadow:3px 3px 0 var(--ink)}
 .calc-out{display:flex;gap:1.5rem;flex-wrap:wrap;font-family:var(--mono);font-size:.88rem;margin-top:.5rem}
 .calc-out b{color:var(--green)}
 </style>
@@ -41,7 +95,7 @@
 <main class="wrap">
   <span class="kicker">The pattern explorer</span>
   <h1>Candlestick patterns, drawn live</h1>
-  <p class="lead">Pick a pattern and watch it draw itself. Hit <b>Show the trade</b> to overlay the entry, stop and target on the same chart — then make the plan real with the calculator below.</p>
+  <p class="lead">Pick a pattern and watch it draw itself. Hit <b>Show the trade</b> to overlay the entry, stop and target, or <b>After the pattern</b> to see the candles that typically follow — then make the plan real with the calculator below.</p>
 
   <div class="ctrl" style="margin-top:1rem">
     <div class="tgl" id="biasFilter">
@@ -61,6 +115,7 @@
           <span class="small" id="patTrend"></span></div>
           <div class="ctrl" style="margin:0">
             <button class="btn btn-ghost btn-sm" id="btnReplay">↻ Replay</button>
+            <button class="btn btn-ghost btn-sm" id="btnAfter">After the pattern</button>
             <button class="btn btn-primary btn-sm" id="btnTrade">Show the trade</button>
           </div>
         </div>
@@ -71,6 +126,7 @@
         <div class="card"><h4>What you see</h4><p id="fSee"></p></div>
         <div class="card"><h4>What it means</h4><p id="fMeans"></p></div>
         <div class="card"><h4>How to trade it</h4><p id="fHow"></p></div>
+        <div class="card"><h4>What comes next</h4><p id="fNext"></p></div>
         <div class="card"><h4>When it fails</h4><p id="fFail"></p></div>
       </div>
 
@@ -94,19 +150,20 @@
   </div>
 </main>
 
-<script src="/js/candles.js?v=2"></script>
-<script src="/js/patterns-data.js?v=2"></script>
-<script src="/js/app.js?v=2"></script>
+<script src="/js/candles.js?v=3"></script>
+<script src="/js/patterns-data.js?v=3"></script>
+<script src="/js/config.js?v=3"></script>
+<script src="/js/app.js?v=3"></script>
 <script>
 AI.onReady = function(){
   const pats = AI.candles;
-  let sel = 0, showTrade = false, filter='all';
+  let sel = 0, showTrade = false, view='pattern', filter='all';
   const svg = document.getElementById('mainChart');
   const W=860,H=360,pad={l:16,r:96,t:18,b:16};
 
   // sidebar
   const list = document.getElementById('patList');
-  function dotCol(p){ return p.bias==='Bullish'?'#22c55e':p.bias==='Bearish'?'#ef4444':'#f59e0b'; }
+  function dotCol(p){ return p.bias==='Bullish'?'var(--green)':p.bias==='Bearish'?'var(--red)':'var(--yellow)'; }
   pats.forEach((p,i)=>{
     const b=document.createElement('button');
     b.innerHTML=`<span>${p.name}</span><span class="dot" style="background:${dotCol(p)}"></span>`;
@@ -135,6 +192,7 @@ AI.onReady = function(){
   const y2p = y => (H-pad.t-pad.b)>0 ? ( (H-pad.b-y)/(H-pad.t-pad.b)*100 ) : 0;
 
   function drawPattern(){
+    view='pattern';
     const p = pats[sel];
     svg.innerHTML='';
     document.getElementById('patName').textContent=p.name;
@@ -142,10 +200,11 @@ AI.onReady = function(){
     document.getElementById('fSee').textContent=p.see;
     document.getElementById('fMeans').textContent=p.means;
     document.getElementById('fHow').textContent=p.how;
+    document.getElementById('fNext').textContent=p.next;
     document.getElementById('fFail').textContent=p.fail;
     const ctx = AI.add('#mainChart', W, H, pad);
     ctx.scale(0,100); ctx.grid(8,4);
-    ctx.title(p.name.toUpperCase()+' — SCHEMATIC', '#64748b');
+    ctx.title(p.name.toUpperCase()+' — SCHEMATIC', 'dim');
     p.draw(ctx, W, H, pad);
     // staggered animation
     const gs=[...svg.querySelectorAll('g.cndl')];
@@ -154,6 +213,30 @@ AI.onReady = function(){
       requestAnimationFrame(()=>requestAnimationFrame(()=>g.style.opacity=1));
     });
     if(showTrade) setTimeout(drawTradeOverlay, gs.length*130+250);
+    renderList();
+  }
+
+  // follow-through view: the pattern's final candles (faded) + the typical next candles
+  function drawAfter(){
+    view='after';
+    const p = pats[sel];
+    svg.innerHTML='';
+    const arr=[...p.tail, ...p.after];
+    const n=arr.length, t=p.tail.length;
+    const ctx = AI.add('#mainChart', W, H, pad);
+    ctx.scale(0,100); ctx.grid(8,4);
+    ctx.title(p.name.toUpperCase()+' — TYPICAL FOLLOW-THROUGH (SCHEMATIC)', 'dim');
+    const bx = ctx.xat(t-0.5, n);
+    ctx.zone(bx, W-pad.r+30, 'accent', .07);
+    ctx.line(bx, pad.t, bx, H-pad.b, 'dim', '5 4', 1.4);
+    arr.forEach((k,i)=>ctx.candle(ctx.xat(i,n), k[0],k[1],k[2],k[3], undefined, {n, op:i<t?0.42:1}));
+    ctx.label(W-pad.r+42, ctx.y2px(p.after[p.after.length-1][3])+4, 'NEXT', 'accent', 'start');
+    ctx.label(bx+6, pad.t+12, 'NOW', 'dim', 'start');
+    const gs=[...svg.querySelectorAll('g.cndl')];
+    gs.forEach((g,i)=>{
+      g.style.opacity=0; g.style.transition='opacity .3s ease '+(i*110)+'ms';
+      requestAnimationFrame(()=>requestAnimationFrame(()=>g.style.opacity=1));
+    });
     renderList();
   }
 
@@ -181,19 +264,19 @@ AI.onReady = function(){
 
     if(neutral){
       // breakout both sides
-      g2.appendChild(mk('line',{x1:pad.l,y1:last.hi,x2:W-pad.r+30,y2:last.hi,stroke:'#22d3ee','stroke-width':1.4,'stroke-dasharray':'6 4'}));
-      g2.appendChild(lbl(last.hi,'BREAK ↑ LONG '+y2p(last.hi).toFixed(1),'#22d3ee'));
-      g2.appendChild(mk('line',{x1:pad.l,y1:last.lo,x2:W-pad.r+30,y2:last.lo,stroke:'#f59e0b','stroke-width':1.4,'stroke-dasharray':'6 4'}));
-      g2.appendChild(lbl(last.lo,'BREAK ↓ SHORT '+y2p(last.lo).toFixed(1),'#f59e0b'));
-      g2.appendChild(mk('rect',{x:pad.l,y:last.hi,width:W-pad.l-pad.r+30,height:last.lo-last.hi,fill:'#22d3ee',opacity:.05}));
+      g2.appendChild(mk('line',{x1:pad.l,y1:last.hi,x2:W-pad.r+30,y2:last.hi,stroke:'var(--blue)','stroke-width':1.4,'stroke-dasharray':'6 4'}));
+      g2.appendChild(lbl(last.hi,'BREAK ↑ LONG '+y2p(last.hi).toFixed(1),'var(--blue)'));
+      g2.appendChild(mk('line',{x1:pad.l,y1:last.lo,x2:W-pad.r+30,y2:last.lo,stroke:'var(--yellow)','stroke-width':1.4,'stroke-dasharray':'6 4'}));
+      g2.appendChild(lbl(last.lo,'BREAK ↓ SHORT '+y2p(last.lo).toFixed(1),'var(--yellow)'));
+      g2.appendChild(mk('rect',{x:pad.l,y:last.hi,width:W-pad.l-pad.r+30,height:last.lo-last.hi,fill:'var(--blue)',opacity:.05}));
     } else if(bull){
       const entryY = Math.min(last.hi, geo[geo.length-2]? geo[geo.length-2].hi : last.hi);
       const stopY  = loAll + 4;
       const risk   = stopY - entryY;
       const tgtY   = entryY - risk*2;
-      g2.appendChild(mk('rect',{x:pad.l,y:entryY,width:W-pad.l-pad.r+30,height:Math.max(2,stopY-entryY),fill:'#ef4444',opacity:.07}));
-      g2.appendChild(mk('rect',{x:pad.l,y:Math.max(pad.t,tgtY),width:W-pad.l-pad.r+30,height:Math.max(2,entryY-Math.max(pad.t,tgtY)),fill:'#22c55e',opacity:.07}));
-      [[stopY,'STOP '+y2p(stopY).toFixed(1),'#ef4444'],[entryY,'ENTRY '+y2p(entryY).toFixed(1),'#e5e7eb'],[tgtY,'TARGET (2R) '+y2p(tgtY).toFixed(1),'#22c55e']].forEach(([y,t,c])=>{
+      g2.appendChild(mk('rect',{x:pad.l,y:entryY,width:W-pad.l-pad.r+30,height:Math.max(2,stopY-entryY),fill:'var(--red)',opacity:.07}));
+      g2.appendChild(mk('rect',{x:pad.l,y:Math.max(pad.t,tgtY),width:W-pad.l-pad.r+30,height:Math.max(2,entryY-Math.max(pad.t,tgtY)),fill:'var(--green)',opacity:.07}));
+      [[stopY,'STOP '+y2p(stopY).toFixed(1),'var(--red)'],[entryY,'ENTRY '+y2p(entryY).toFixed(1),'var(--ink-2)'],[tgtY,'TARGET (2R) '+y2p(tgtY).toFixed(1),'var(--green)']].forEach(([y,t,c])=>{
         g2.appendChild(mk('line',{x1:pad.l,y1:y,x2:W-pad.r+30,y2:y,stroke:c,'stroke-width':1.5,'stroke-dasharray':'6 4'}));
         g2.appendChild(lbl(y,t,c));
       });
@@ -202,9 +285,9 @@ AI.onReady = function(){
       const stopY  = hiAll - 4;
       const risk   = stopY - entryY;
       const tgtY   = entryY + risk*2;
-      g2.appendChild(mk('rect',{x:pad.l,y:Math.max(pad.t,entryY),width:W-pad.l-pad.r+30,height:Math.max(2,stopY-entryY),fill:'#ef4444',opacity:.07}));
-      g2.appendChild(mk('rect',{x:pad.l,y:entryY,width:W-pad.l-pad.r+30,height:Math.max(2,Math.min(H-pad.b,tgtY)-entryY),fill:'#22c55e',opacity:.07}));
-      [[stopY,'STOP '+y2p(stopY).toFixed(1),'#ef4444'],[entryY,'ENTRY (SHORT) '+y2p(entryY).toFixed(1),'#e5e7eb'],[tgtY,'TARGET (2R) '+y2p(tgtY).toFixed(1),'#22c55e']].forEach(([y,t,c])=>{
+      g2.appendChild(mk('rect',{x:pad.l,y:Math.max(pad.t,entryY),width:W-pad.l-pad.r+30,height:Math.max(2,stopY-entryY),fill:'var(--red)',opacity:.07}));
+      g2.appendChild(mk('rect',{x:pad.l,y:entryY,width:W-pad.l-pad.r+30,height:Math.max(2,Math.min(H-pad.b,tgtY)-entryY),fill:'var(--green)',opacity:.07}));
+      [[stopY,'STOP '+y2p(stopY).toFixed(1),'var(--red)'],[entryY,'ENTRY (SHORT) '+y2p(entryY).toFixed(1),'var(--ink-2)'],[tgtY,'TARGET (2R) '+y2p(tgtY).toFixed(1),'var(--green)']].forEach(([y,t,c])=>{
         g2.appendChild(mk('line',{x1:pad.l,y1:y,x2:W-pad.r+30,y2:y,stroke:c,'stroke-width':1.5,'stroke-dasharray':'6 4'}));
         g2.appendChild(lbl(y,t,c));
       });
@@ -218,11 +301,16 @@ AI.onReady = function(){
     sel=(i+pats.length)%pats.length;
     showTrade=false;
     document.getElementById('btnTrade').textContent='Show the trade';
+    document.getElementById('btnAfter').textContent='After the pattern';
     drawPattern();
     if(history.replaceState) history.replaceState(null,'','#'+pats[sel].name.toLowerCase().replace(/[^a-z0-9]+/g,'-'));
   }
 
   document.getElementById('btnReplay').addEventListener('click',drawPattern);
+  document.getElementById('btnAfter').addEventListener('click',e=>{
+    if(view==='after'){ e.target.textContent='After the pattern'; drawPattern(); }
+    else { e.target.textContent='↩ Back to pattern'; showTrade=false; document.getElementById('btnTrade').textContent='Show the trade'; drawAfter(); }
+  });
   document.getElementById('btnTrade').addEventListener('click',e=>{
     showTrade=!showTrade;
     e.target.textContent = showTrade? 'Hide the trade':'Show the trade';
