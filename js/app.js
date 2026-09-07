@@ -1,4 +1,4 @@
-/* TheAI101 shared app: nav/footer injection + reveal animations */
+/* TheAI101 shared app: ambient glass background + nav/footer + reveal animations */
 (function(){
 'use strict';
 const AI = window.AI = window.AI || {};
@@ -24,7 +24,14 @@ const FOOT = `
   <div>Educational content only — not financial advice.</div>
 </div>`;
 
+const BG = `
+<div class="ai-bg" aria-hidden="true">
+  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="orb o4"></div>
+  <div class="ai-grid"></div>
+</div>`;
+
 function inject(){
+  document.body.insertAdjacentHTML('afterbegin', BG);
   const nav = document.createElement('nav');
   nav.innerHTML = NAV;
   document.body.prepend(nav);
@@ -40,19 +47,17 @@ function inject(){
   document.body.appendChild(foot);
 }
 
-// scroll reveal
 function observe(){
+  if(!('IntersectionObserver' in window)){
+    document.querySelectorAll('[data-reveal]').forEach(el=>el.classList.add('in'));
+    return;
+  }
   const io = new IntersectionObserver(es=>{
     es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
   },{threshold:.12});
-  document.querySelectorAll('[data-reveal]').forEach(el=>{ el.style.opacity=0; el.style.transform='translateY(14px)'; el.style.transition='opacity .5s ease,transform .5s ease'; io.observe(el); });
+  document.querySelectorAll('[data-reveal]').forEach(el=>io.observe(el));
 }
-// add .in styles
-const st = document.createElement('style');
-st.textContent = '[data-reveal].in{opacity:1!important;transform:none!important}';
-document.head.appendChild(st);
 
-// count-up numbers
 function countUps(){
   document.querySelectorAll('[data-count]').forEach(el=>{
     const target = parseFloat(el.dataset.count);

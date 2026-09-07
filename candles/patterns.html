@@ -13,20 +13,26 @@
 <style>
 .explorer{display:grid;grid-template-columns:250px 1fr;gap:1.25rem;align-items:start}
 @media(max-width:900px){.explorer{grid-template-columns:1fr}}
-.pat-list{display:flex;flex-direction:column;gap:.25rem;position:sticky;top:70px;max-height:calc(100vh - 90px);overflow:auto}
-.pat-list button{background:transparent;border:1px solid transparent;border-radius:8px;color:var(--muted);text-align:left;padding:.45rem .6rem;cursor:pointer;font-size:.88rem;display:flex;justify-content:space-between;align-items:center;font-family:var(--sans)}
-.pat-list button:hover{background:var(--card);color:var(--text)}
-.pat-list button.sel{background:rgba(34,197,94,.09);border-color:rgba(34,197,94,.35);color:var(--text)}
-.pat-list .dot{width:7px;height:7px;border-radius:99px;flex:none}
-.bigchart{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1rem}
+.pat-list{display:flex;flex-direction:column;gap:.25rem;position:sticky;top:86px;max-height:calc(100vh - 110px);overflow:auto;
+  background:rgba(10,14,23,.55);backdrop-filter:blur(18px) saturate(165%);-webkit-backdrop-filter:blur(18px) saturate(165%);
+  border:1px solid rgba(255,255,255,.085);border-radius:16px;padding:.5rem;
+  box-shadow:0 14px 34px -14px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.055)}
+.pat-list::-webkit-scrollbar{width:6px}
+.pat-list button{background:transparent;border:1px solid transparent;border-radius:9px;color:var(--muted);text-align:left;padding:.45rem .6rem;cursor:pointer;font-size:.88rem;display:flex;justify-content:space-between;align-items:center;font-family:var(--sans)}
+.pat-list button:hover{background:rgba(255,255,255,.07);color:var(--text)}
+.pat-list button.sel{background:rgba(34,197,94,.13);border-color:rgba(34,197,94,.32);color:var(--text)}
+.pat-list .dot{width:7px;height:7px;border-radius:99px;flex:none;box-shadow:0 0 8px currentColor}
+.bigchart{background:rgba(10,14,23,.55);backdrop-filter:blur(18px) saturate(165%);-webkit-backdrop-filter:blur(18px) saturate(165%);
+  border:1px solid rgba(255,255,255,.085);border-radius:18px;padding:1rem;
+  box-shadow:0 18px 42px -14px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.055)}
 .bigchart svg{width:100%;height:auto;display:block}
 .facts4{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.8rem;margin-top:1rem}
 .facts4 .card h4{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin:0 0 .4rem}
 .facts4 .card p{font-size:.9rem;margin:0}
-.overlay-lbl{font-family:'JetBrains Mono',monospace;font-size:10px}
 .calc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.7rem;margin:.6rem 0}
 .calc-grid label{font-family:var(--mono);font-size:.72rem;color:var(--muted);display:block;margin-bottom:.25rem}
-.calc-grid input{width:100%;background:var(--bg);border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:.5rem .6rem;font-family:var(--mono);font-size:.9rem}
+.calc-grid input{width:100%;background:rgba(0,0,0,.32);border:1px solid rgba(255,255,255,.14);color:var(--text);border-radius:9px;padding:.5rem .6rem;font-family:var(--mono);font-size:.9rem;transition:border-color .15s}
+.calc-grid input:focus{border-color:rgba(34,197,94,.55);outline:none;box-shadow:0 0 0 3px rgba(34,197,94,.12)}
 .calc-out{display:flex;gap:1.5rem;flex-wrap:wrap;font-family:var(--mono);font-size:.88rem;margin-top:.5rem}
 .calc-out b{color:var(--green)}
 </style>
