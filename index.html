@@ -4,165 +4,206 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TheAI101 — Learn to Read the Charts, Visually</title>
-<meta name="description" content="Visual trading education: candlestick patterns, chart patterns, and how stocks, options, forex and binary markets actually work — taught with animated charts. Plus desk gear for traders.">
+<meta name="description" content="Visual trading education that plays like a game: a 7-unit lesson path with boss games between units, pattern-recognition drills, and a live arena streaming real market data. Free, no account.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/site.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'><rect x='2' y='6' width='4' height='7' rx='1' fill='%23ef4444'/><rect x='11' y='3' width='4' height='8' rx='1' fill='%2322c55e'/></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/site.css?v=2">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'><rect x='2' y='6' width='4' height='7' rx='1' fill='%23e8590c'/><rect x='11' y='3' width='4' height='8' rx='1' fill='%23188a4e'/></svg>">
 </head>
 <body>
 
-<header class="wrap hero">
-  <span class="kicker">Visual trading school</span>
-  <h1>Stop memorizing.<br>Start <span class="g">seeing</span> the <span class="r">charts.</span></h1>
-  <p class="lead" style="margin:0 auto">Every pattern drawn, animated, and explained in plain English —
-  candlesticks, chart patterns, and the four major markets. Built for people who learn with their eyes, not a textbook.</p>
-  <svg class="hero-candles" id="heroChart" viewBox="0 0 560 170" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Animated market chart"></svg>
-  <div class="ctrl" style="justify-content:center;margin-top:1rem">
-    <a class="btn btn-primary" href="/academy/">Enter Academy Arcade →</a>
-    <a class="btn btn-ghost" href="/candles/anatomy.html">Start from zero</a>
-  </div>
-</header>
-
 <main class="wrap">
-  <hr class="divider">
+  <section class="hero" data-reveal>
+    <span class="kicker">Visual trading school</span>
+    <h1>Stop memorizing.<br>Start <span class="g">seeing</span> the <span class="o">charts.</span></h1>
+    <p class="lead" style="margin:0 auto">Lessons that play like a game: read a chart, make the call, see what happened. Then step into the live arena and practice on real market streams — with zero real money on the line.</p>
+    <div class="ctrl" style="justify-content:center;margin-top:1.2rem">
+      <a class="btn btn-primary btn-big" href="/academy/">Start the path →</a>
+      <a class="btn btn-ghost btn-big" href="/practice/">Live arena</a>
+    </div>
 
-  <section>
-    <h2>Three ways in</h2>
-    <div class="grid g3">
-      <div class="card" data-reveal>
-        <span class="chip bull">New game mode</span>
-        <h3 style="margin:.6rem 0 .4rem">Play the arcade</h3>
-        <p class="small" style="margin-bottom:.8rem">Short missions teach candle anatomy, pattern recognition, fakeouts, stop placement, and live-style decisions with XP and streaks.</p>
-        <a class="btn btn-primary btn-sm" href="/academy/">Enter Academy Arcade →</a>
+    <div class="panel" style="max-width:760px;margin:2.2rem auto 0;text-align:left;padding:0;overflow:hidden" aria-label="Live market preview">
+      <div style="display:flex;align-items:center;gap:.7rem;padding:.7rem 1rem;border-bottom:2px solid var(--ink);background:var(--paper-3)">
+        <span class="live-dot" id="heroDot"><i></i>SYNCING</span>
+        <span class="mono" style="font-weight:700" id="heroSym">BTC-USD</span>
+        <b class="mono" id="heroPrice" style="margin-left:auto;font-size:1.05rem">—</b>
       </div>
-      <div class="card" data-reveal>
-        <span class="chip neut">New to trading</span>
-        <h3 style="margin:.6rem 0 .4rem">Start from zero</h3>
-        <p class="small" style="margin-bottom:.8rem">What a candle even is, what open/high/low/close mean, and how a chart turns thousands of trades into one picture. Ten minutes, and charts stop looking like noise.</p>
-        <a class="btn btn-ghost btn-sm" href="/candles/anatomy.html">Anatomy of a candle →</a>
-      </div>
-      <div class="card" data-reveal>
-        <span class="chip bull">Know the basics</span>
-        <h3 style="margin:.6rem 0 .4rem">Level up</h3>
-        <p class="small" style="margin-bottom:.8rem">Dive straight into the pattern explorer — animated candlestick and chart patterns with entries, stops, targets, and exactly how each one fails.</p>
-        <a class="btn btn-ghost btn-sm" href="/candles/patterns.html">Pattern explorer →</a>
-      </div>
+      <svg id="heroChart" viewBox="0 0 720 260" role="img" aria-label="Live bitcoin chart" style="display:block;width:100%;height:auto;padding:.6rem"></svg>
+      <div class="cap" style="padding:0 1rem .8rem">Real BTC-USD one-minute candles from a public exchange feed — updating while you read.</div>
     </div>
   </section>
 
-  <section>
-    <h2>TheAI101 Academy Arcade</h2>
-    <p class="lead">The site now teaches like a game: read the chart, make the call, reveal the answer, earn XP, and learn what to look for next time.</p>
+  <hr class="divider">
+
+  <section data-reveal>
+    <div class="section-head">
+      <div>
+        <span class="kicker">The learning path</span>
+        <h2>Lessons first. Boss games between.</h2>
+      </div>
+      <a class="btn btn-ghost btn-sm" href="/academy/">Open the full path →</a>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.8rem;margin-top:1rem">
+      <a class="card" href="/academy/#u1l1" style="padding:1rem"><span class="chip neut">Unit 1</span><h3 style="margin:.5rem 0 .2rem;font-size:1rem">Chart Basics</h3><p class="small">Candles, wicks, and the three questions.</p></a>
+      <a class="card" href="/academy/#u2l1" style="padding:1rem"><span class="chip neut">Unit 2</span><h3 style="margin:.5rem 0 .2rem;font-size:1rem">Single-Candle Signals</h3><p class="small">Doji, hammer, star, marubozu.</p></a>
+      <a class="card" href="/academy/#u3l1" style="padding:1rem"><span class="chip neut">Unit 3</span><h3 style="margin:.5rem 0 .2rem;font-size:1rem">Multi-Candle Stories</h3><p class="small">Engulfing, stars, tweezers, soldiers.</p></a>
+      <a class="card" href="/academy/#u4l1" style="padding:1rem"><span class="chip neut">Unit 4</span><h3 style="margin:.5rem 0 .2rem;font-size:1rem">Chart Patterns</h3><p class="small">Levels, trends, M &amp; W, triangles.</p></a>
+      <a class="card" href="/academy/#u5l1" style="padding:1rem"><span class="chip bear">Unit 5</span><h3 style="margin:.5rem 0 .2rem;font-size:1rem">Traps &amp; Breakouts</h3><p class="small">Fakeouts, liquidity, retests.</p></a>
+      <a class="card" href="/academy/#u6l1" style="padding:1rem"><span class="chip bull">Unit 6</span><h3 style="margin:.5rem 0 .2rem;font-size:1rem">Risk Comes First</h3><p class="small">Stops, R-multiples, the 1% rule.</p></a>
+      <a class="card" href="/practice/" style="padding:1rem;border-color:var(--accent)"><span class="chip">Unit 7</span><h3 style="margin:.5rem 0 .2rem;font-size:1rem">The Live Lab</h3><p class="small">Graduate into the real-data arena.</p></a>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section data-reveal>
+    <div class="section-head">
+      <div>
+        <span class="kicker">Practice arena — real data</span>
+        <h2>Train on the same prices traders watch</h2>
+      </div>
+    </div>
+    <div class="grid g3" style="margin-top:1rem">
+      <a class="card" href="/practice/" style="text-decoration:none;color:inherit">
+        <span class="chip bull">LIVE FEED</span>
+        <h3 style="margin:.6rem 0 .3rem">Candle Calls</h3>
+        <p class="small">The chart streams live BTC, ETH, SOL and more. Call the next candle up or down before it closes. Seconds per round, honest scoring.</p>
+      </a>
+      <a class="card" href="/practice/" style="text-decoration:none;color:inherit">
+        <span class="chip neut">VERIFIED</span>
+        <h3 style="margin:.6rem 0 .3rem">Pattern Hunt · Real</h3>
+        <p class="small">We scan real exchange candles with pattern detectors. When a clean engulfing or hammer actually completes, you name it — ground truth included.</p>
+      </a>
+      <a class="card" href="/practice/" style="text-decoration:none;color:inherit">
+        <span class="chip bull">REGIME</span>
+        <h3 style="margin:.6rem 0 .3rem">Trend or Range</h3>
+        <p class="small">Thirty real candles on the table. Call the regime before the reveal — the number-one filter for every trade you will ever take.</p>
+      </a>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section data-reveal>
+    <div class="section-head">
+      <div>
+        <span class="kicker">Pattern explorer</span>
+        <h2>Every pattern drawn by code, not stock photos</h2>
+      </div>
+      <a class="btn btn-ghost btn-sm" href="/candles/patterns.html">All 14 candle patterns →</a>
+    </div>
+    <div class="grid g2" id="homePat" style="margin-top:1rem"></div>
+  </section>
+
+  <hr class="divider">
+
+  <section data-reveal>
+    <div class="section-head">
+      <div>
+        <span class="kicker">Four markets, one language</span>
+        <h2>Stocks, options, forex, binaries</h2>
+      </div>
+    </div>
     <div class="grid g4" style="margin-top:1rem">
-      <a class="card" href="/academy/#play" data-reveal style="text-decoration:none;color:inherit">
-        <h3>🕯️ Candle Builder</h3>
-        <p class="small">Watch a candle form from open to close, then identify whether it is momentum, indecision, or rejection.</p>
-      </a>
-      <a class="card" href="/academy/#games" data-reveal style="text-decoration:none;color:inherit">
-        <h3>🎯 Pattern Hunt</h3>
-        <p class="small">Name the setup under pressure and build pattern-recognition streaks.</p>
-      </a>
-      <a class="card" href="/academy/#games" data-reveal style="text-decoration:none;color:inherit">
-        <h3>🕵️ Fakeout Detective</h3>
-        <p class="small">Inspect wick, close, and retest clues before deciding if a breakout is real.</p>
-      </a>
-      <a class="card" href="/academy/#games" data-reveal style="text-decoration:none;color:inherit">
-        <h3>🛡️ Stop Loss Samurai</h3>
-        <p class="small">Place the stop where the chart idea is wrong, not where fear wants it.</p>
-      </a>
-    </div>
-  </section>
-
-  <section>
-    <h2>The pattern explorer</h2>
-    <p class="lead">Every pattern is drawn by code, not pasted from a stock-photo chart. Watch it form, flip it bullish↔bearish, and toggle the trade on top of the same chart.</p>
-    <div class="ctrl" style="margin:1rem 0 .5rem">
-      <button class="btn btn-ghost btn-sm" id="heroReplay">↻ Replay animation</button>
-      <span class="small">Sample below — <a href="/candles/patterns.html">see all 14 candlestick patterns</a></span>
-    </div>
-    <div class="grid g2" id="heroPat"></div>
-  </section>
-
-  <hr class="divider">
-
-  <section>
-    <h2>Four markets, one visual language</h2>
-    <p class="lead">The candles are the same everywhere — what changes is leverage, hours, and how you're charged. Start with any market:</p>
-    <div class="grid g4">
-      <a class="card" href="/markets/stocks.html" data-reveal style="text-decoration:none;color:inherit">
-        <h3>📈 Stocks</h3>
+      <a class="card" href="/markets/stocks.html" style="text-decoration:none;color:inherit">
+        <h3>Stocks</h3>
         <p class="small">Ownership of a company. Market vs limit orders, market hours, and why beginners start here.</p>
       </a>
-      <a class="card" href="/markets/options.html" data-reveal style="text-decoration:none;color:inherit">
-        <h3>⚡ Options</h3>
+      <a class="card" href="/markets/options.html" style="text-decoration:none;color:inherit">
+        <h3>Options</h3>
         <p class="small">Contracts with leverage and an expiration date. Calls, puts, and the P/L shapes that make it click.</p>
       </a>
-      <a class="card" href="/markets/forex.html" data-reveal style="text-decoration:none;color:inherit">
-        <h3>🌍 Forex</h3>
-        <p class="small">Currencies traded in pairs, 24 hours a day. Pips, lots, and the session clock that drives volatility.</p>
+      <a class="card" href="/markets/forex.html" style="text-decoration:none;color:inherit">
+        <h3>Forex</h3>
+        <p class="small">Currency pairs around the clock. Pips, lots, and the session clock that drives volatility.</p>
       </a>
-      <a class="card" href="/markets/binary.html" data-reveal style="text-decoration:none;color:inherit">
-        <h3>🎰 Binary options</h3>
-        <p class="small">A fixed bet on direction with a fixed payout — and fixed odds. See the exact math before you ever deposit.</p>
+      <a class="card" href="/markets/binary.html" style="text-decoration:none;color:inherit">
+        <h3>Binary options</h3>
+        <p class="small">A fixed bet with a fixed payout — and fixed odds. See the exact math before you ever deposit.</p>
       </a>
     </div>
-    <div class="warn" style="margin-top:1rem"><b>Reality check:</b> most retail traders lose money — in every market. The edge this site teaches is boring: read the chart, define your risk before you enter, and survive to trade the next pattern.</div>
+    <div class="warn"><b>Reality check:</b> most retail traders lose money — in every market. The edge this site teaches is boring: read the chart, define your risk before you enter, and survive to trade the next pattern.</div>
   </section>
 
   <hr class="divider">
 
   <section class="panel" style="text-align:center;padding:2.5rem 1.5rem" data-reveal>
-    <span class="badge">New — the shop</span>
+    <span class="badge">The shop</span>
     <h2 style="margin-top:.6rem">Learn the charts. Then put them on your desk.</h2>
-    <p class="lead" style="margin:0 auto 1.2rem">Desk mats, mouse pads and posters that are actual reference tools — the same patterns you just learned, printed terminal-style. Made for traders, by a trading site.</p>
+    <p class="lead" style="margin:0 auto 1.2rem">Desk mats, mouse pads and posters that are actual reference tools — the same patterns you just learned, printed arcade-style.</p>
     <div style="display:flex;gap:2.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.4rem" class="mono">
-      <div><div style="font-size:1.7rem;font-weight:700;color:var(--green)"><span data-count="24">0</span></div><div class="small">patterns on the site</div></div>
-      <div><div style="font-size:1.7rem;font-weight:700;color:var(--green)"><span data-count="14">0</span></div><div class="small">on the desk mat</div></div>
-      <div><div style="font-size:1.7rem;font-weight:700;color:var(--green)"><span data-count="7">0</span></div><div class="small">gear designs</div></div>
+      <div><div style="font-size:1.7rem;font-weight:700;color:var(--accent-deep)"><span data-count="24">0</span></div><div class="small">patterns on the site</div></div>
+      <div><div style="font-size:1.7rem;font-weight:700;color:var(--accent-deep)"><span data-count="14">0</span></div><div class="small">on the desk mat</div></div>
+      <div><div style="font-size:1.7rem;font-weight:700;color:var(--accent-deep)"><span data-count="7">0</span></div><div class="small">gear designs</div></div>
     </div>
     <a class="btn btn-primary" href="https://trading-101.printify.me" target="_blank" rel="noopener">Browse the shop →</a>
   </section>
 </main>
 
-<script src="/js/candles.js"></script>
-<script src="/js/patterns-data.js"></script>
-<script src="/js/app.js"></script>
+<script src="/js/candles.js?v=2"></script>
+<script src="/js/patterns-data.js?v=2"></script>
+<script src="/js/market.js?v=2"></script>
+<script src="/js/app.js?v=2"></script>
 <script>
 AI.onReady = function(){
-  // hero ambient chart
-  const hc = AI.add('#heroChart', 560, 170, {l:10,r:10,t:14,b:10});
-  function hero(){
-    hc.el.innerHTML='';
-    hc.scale(0,100);
-    const n=26, drift=1.05;
-    let p=38;
-    for(let i=0;i<n;i++){
-      p += drift + (Math.sin(i*1.7)*1.4) + ((i*7919%13)-6)*0.35;
-      const o=p-0.7, c=p+1.3, h=p+2.6, l=o-2.4;
-      hc.candle(hc.xat(i,n), Math.max(4,Math.min(88,o)), Math.max(6,Math.min(92,h)), Math.max(2,Math.min(86,l)), Math.max(4,Math.min(90,c)), 9, {n});
-    }
-  }
-  hero();
-  document.getElementById('heroReplay').addEventListener('click', hero);
+  AI.market.onStatus(s=>{
+    const d = document.getElementById('heroDot');
+    if(!d) return;
+    d.className = 'live-dot' + (s==='live'?'':s==='offline'?' err':' off');
+    d.innerHTML = `<i></i>${s==='live'?'LIVE':s==='offline'?'OFFLINE':'SYNCING'}`;
+  });
 
-  // two sample pattern cards with staggered self-drawing animation
-  const samples = [AI.candles[5], AI.candles[0]]; // morning star, bullish engulfing
-  const host = document.getElementById('heroPat');
-  samples.forEach((pat,si)=>{
-    const card = document.createElement('div');
-    card.className='pat-card';
-    card.innerHTML = `<div class="pat-head"><h3>${pat.name}</h3><span class="chip ${pat.bias==='Bullish'?'bull':'bear'}">${pat.bias}</span></div>
-      <svg class="pv" style="padding:0 1rem;display:block;width:calc(100% - 2rem)" viewBox="0 0 460 150" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Pattern preview"></svg>
+  // live hero chart: real 1m candles + a live-forming tail
+  const svg = document.getElementById('heroChart');
+  let hist = [], forming = null, lastPrice = null, raf = false, lastDraw = 0;
+  function draw(){
+    if(raf) return; raf = true;
+    requestAnimationFrame(()=>{
+      raf = false;
+      const now = performance.now();
+      if(now - lastDraw < 250) return;   // throttle: max 4 redraws/sec
+      lastDraw = now;
+      if(!hist.length) return;
+      const all = [...hist.slice(-26), ...(forming?[forming]:[])];
+      const lo = Math.min(...all.map(k=>k.l)), hi = Math.max(...all.map(k=>k.h));
+      const pad = (hi-lo)*.12 || hi*.0005;
+      svg.innerHTML = '';
+      const ctx = AI.add(svg, 720, 260, {l:12,r:70,t:14,b:10});
+      ctx.scale(lo-pad, hi+pad);
+      all.forEach((k,i)=>ctx.candle(ctx.xat(i,28), k.o,k.h,k.l,k.c, undefined, {n:28}));
+      const last = svg.querySelector('g.cndl:last-of-type');
+      if(last) last.classList.add('hot-candle');
+      const priceEl = document.getElementById('heroPrice');
+      if(priceEl && lastPrice){
+        priceEl.textContent = AI.market.fmt(lastPrice);
+        priceEl.className = 'mono ' + (forming && forming.c>=forming.o ? 'up':'down');
+      }
+    });
+  }
+  AI.market.klines('BTC','1m',30).then(kl=>{ hist = kl; draw(); }).catch(()=>{});
+  AI.market.subscribe(['BTC'], {onPrice:(k,p)=>{
+    lastPrice = p;
+    const now = Date.now(), t0 = now - (now % 15000);
+    if(!forming || forming.t0 !== t0){ forming = {t0, o:p, h:p, l:p, c:p}; }
+    forming.h = Math.max(forming.h, p); forming.l = Math.min(forming.l, p); forming.c = p;
+    draw();
+  }});
+
+  // sample pattern cards
+  const host = document.getElementById('homePat');
+  [AI.candles[5], AI.candles[0]].forEach((pat,si)=>{ // morning star, bullish engulfing
+    const card = document.createElement('a');
+    card.className = 'pat-card';
+    card.href = '/candles/patterns.html';
+    card.innerHTML = `<div class="pat-head"><h3>${pat.name}</h3><span class="chip ${pat.bias==='Bullish'?'bull':pat.bias==='Bearish'?'bear':'neut'}">${pat.bias}</span></div>
+      <svg class="pv" style="padding:0 1rem;display:block;width:calc(100% - 2rem)" viewBox="0 0 460 150" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${pat.name} preview"></svg>
       <div class="pat-body"><div class="pat-facts"><div><b>What you see</b>${pat.see}</div></div></div>
-      <div style="padding:0 1rem 1rem"><a class="small" href="/candles/patterns.html">How to trade it →</a></div>`;
+      <div style="padding:0 1rem 1rem"><span class="small" style="color:var(--accent-deep);font-weight:800">How to trade it →</span></div>`;
     host.appendChild(card);
     const c = AI.add(card.querySelector('.pv'), 460, 150, {l:8,r:40,t:14,b:12});
     c.scale(0,100); pat.draw(c);
-    // staggered reveal of candles
-    const g = Array.from(c.el.querySelectorAll('g.cndl'));
-    g.forEach((k,i)=>{ k.style.opacity=0; k.style.transition=`opacity .35s ease ${i*140+si*300}ms`; requestAnimationFrame(()=>requestAnimationFrame(()=>k.style.opacity=1)); });
+    AI.animate(card.querySelector('.pv'), 130 + si*80);
   });
 };
 </script>

@@ -3,40 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TheAI101 Academy Arcade — Trading Games for Visual Learners</title>
-<meta name="description" content="Play visual trading games that teach candle anatomy, pattern recognition, fakeouts, stop placement, and live-market decision making without risking real money.">
+<title>TheAI101 Academy — Learn to Read Charts, Lesson by Lesson</title>
+<meta name="description" content="A game-like learning path for visual traders: 7 units of chart lessons with boss battles between them, XP and streaks, plus live-market practice with real data. Free, no account.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/site.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'><rect x='2' y='6' width='4' height='7' rx='1' fill='%23ef4444'/><rect x='11' y='3' width='4' height='8' rx='1' fill='%2322c55e'/></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/site.css?v=2">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'><rect x='2' y='6' width='4' height='7' rx='1' fill='%23e8590c'/><rect x='11' y='3' width='4' height='8' rx='1' fill='%23188a4e'/></svg>">
 </head>
 <body>
 <main class="wrap arcade-page">
-  <section class="arcade-hero panel" data-reveal>
-    <div class="arcade-copy">
-      <span class="kicker">TheAI101 Academy Arcade</span>
-      <h1>Learn trading like a game — with candles, missions, XP, and instant feedback.</h1>
-      <p class="lead">Built for visual learners: watch candles form, spot patterns under pressure, catch fakeouts, place smart stops, and practice live-style decisions with virtual money only.</p>
-      <div class="ctrl hero-actions">
-        <a class="btn btn-primary" href="#play">Start playing →</a>
-        <a class="btn btn-ghost" href="#games">See all game modes</a>
-      </div>
-      <div class="arcade-badges" aria-label="Academy features">
-        <span>⚡ 5 playable modes</span>
-        <span>🎯 XP + streaks</span>
-        <span>🕹️ No real money</span>
-        <span>🧠 Pattern memory</span>
-      </div>
-    </div>
-    <div class="arcade-terminal" aria-label="Animated academy dashboard">
-      <div class="terminal-top"><span></span><span></span><span></span><b>MARKET ARENA TRAINING FEED</b></div>
-      <svg id="arcadeHeroChart" viewBox="0 0 560 300" role="img" aria-label="Animated trading game chart"></svg>
-      <div class="terminal-hud">
-        <div><b id="heroPulsePrice">BTC-USD</b><span>training chart</span></div>
-        <div><b class="up">+XP</b><span>every correct rep</span></div>
-        <div><b class="down">SAFE</b><span>virtual only</span></div>
-      </div>
+
+  <section class="hero" style="padding-bottom:1rem" data-reveal>
+    <span class="kicker">TheAI101 Academy</span>
+    <h1>Learn the charts like a <span class="o">game</span>,<br>not a textbook.</h1>
+    <p class="lead">Seven units of visual lessons. Boss games between every unit. XP, streaks, and a live-data arena at the end — with zero real money anywhere.</p>
+    <div class="ctrl">
+      <button class="btn btn-primary btn-big" id="resumeBtn">Continue learning →</button>
+      <a class="btn btn-ghost" href="/practice/">Skip to live practice</a>
     </div>
   </section>
 
@@ -46,108 +30,119 @@
       <b id="hudLevel">1</b>
       <small id="hudRank">Candle Rookie</small>
     </div>
-    <div class="hud-card wide">
+    <div class="hud-card">
       <span>XP</span>
-      <b><span id="hudXp">0</span> / <span id="hudNext">500</span></b>
+      <b><span id="hudXp">0</span> / <span id="hudNext">400</span></b>
       <div class="xp-track"><i id="hudXpFill"></i></div>
     </div>
     <div class="hud-card">
       <span>STREAK</span>
-      <b id="hudStreak">0 🔥</b>
+      <b id="hudStreak">0</b>
       <small>correct in a row</small>
     </div>
     <div class="hud-card">
-      <span>ACCURACY</span>
-      <b id="hudAcc">—</b>
-      <small id="hudPlayed">0 rounds</small>
+      <span>PATH</span>
+      <b><span id="hudDone">0</span>/<span id="hudTotal">27</span></b>
+      <small><span id="hudPlayed">0 rounds</span> · <span id="hudAcc">—</span></small>
     </div>
   </section>
 
-  <section id="games" data-reveal>
+  <section id="path" data-reveal>
     <div class="section-head">
       <div>
-        <span class="kicker">Choose your mission</span>
-        <h2>Trading games that teach different skills</h2>
+        <span class="kicker">The learning path</span>
+        <h2>Lessons first, boss games between</h2>
       </div>
       <button class="btn btn-ghost btn-sm" id="resetArcade">Reset progress</button>
     </div>
-    <div class="game-map" role="tablist" aria-label="Trading game modes">
-      <button class="game-card active" data-game="builder" role="tab" aria-selected="true">
-        <span class="game-icon">🕯️</span><b>Candle Builder</b><small>Learn open, high, low, close by watching one candle form.</small><em>Beginner · +40 XP</em>
-      </button>
-      <button class="game-card" data-game="hunt" role="tab" aria-selected="false">
-        <span class="game-icon">🎯</span><b>Pattern Hunt</b><small>Identify the setup before the reveal and build a streak.</small><em>Core skill · +60 XP</em>
-      </button>
-      <button class="game-card" data-game="detective" role="tab" aria-selected="false">
-        <span class="game-icon">🕵️</span><b>Fakeout Detective</b><small>Inspect clues and decide whether the breakout is real.</small><em>Anti-trap · +70 XP</em>
-      </button>
-      <button class="game-card" data-game="samurai" role="tab" aria-selected="false">
-        <span class="game-icon">🛡️</span><b>Stop Loss Samurai</b><small>Place the stop where the trade idea is actually wrong.</small><em>Risk · +70 XP</em>
-      </button>
-      <button class="game-card" data-game="arena" role="tab" aria-selected="false">
-        <span class="game-icon">⚔️</span><b>Market Arena</b><small>Predict the next training candle and review your decision.</small><em>Live-style · +80 XP</em>
-      </button>
-      <button class="game-card locked" data-game="options" role="tab" aria-selected="false">
-        <span class="game-icon">📐</span><b>Options Payoff Puzzle</b><small>Drag calls and puts into payoff shapes. Coming next.</small><em>Pro lab</em>
-      </button>
-      <button class="game-card locked" data-game="binary" role="tab" aria-selected="false">
-        <span class="game-icon">🧮</span><b>Binary Breakeven Lab</b><small>See exactly what payout and win rate require. Coming next.</small><em>Math lab</em>
-      </button>
-      <button class="game-card locked" data-game="tycoon" role="tab" aria-selected="false">
-        <span class="game-icon">🏙️</span><b>Portfolio Tycoon</b><small>Build a virtual account that survives volatility. Coming next.</small><em>Stocks lab</em>
-      </button>
+    <div class="path-map" id="pathMap"></div>
+  </section>
+
+  <section id="lessonShell" class="lesson-shell" hidden data-reveal>
+    <div class="panel">
+      <div class="lesson-head">
+        <div>
+          <span class="badge" id="lessonNo">LESSON 1</span>
+          <h2 id="lessonTitle" style="margin:.4rem 0">Lesson</h2>
+          <p class="lead" id="lessonDesc" style="font-size:1rem"></p>
+        </div>
+      </div>
+      <div class="lesson-progress" id="lessonProgress" aria-hidden="true"></div>
+      <div class="lesson-body" id="lessonBody"></div>
+      <div class="lesson-footer">
+        <button class="btn btn-primary" id="lessonFooterNext" hidden>Next</button>
+      </div>
     </div>
   </section>
 
-  <section id="play" class="game-shell panel" data-reveal>
-    <div class="game-shell-head">
+  <hr class="divider">
+
+  <section id="free" data-reveal>
+    <div class="section-head">
       <div>
-        <span class="badge" id="gameBadge">BEGINNER</span>
-        <h2 id="gameTitle">Candle Builder</h2>
-        <p class="lead" id="gameDesc">Watch a candle form, then identify what the candle is telling you.</p>
+        <span class="kicker">Free play</span>
+        <h2>Arcade — no gates, just reps</h2>
       </div>
-      <div class="round-meter mono">
-        <span>ROUND</span>
-        <b id="roundLabel">1</b>
-      </div>
+      <a class="btn btn-ghost btn-sm" href="/practice/">Live-market practice →</a>
     </div>
-    <div class="game-board" id="gameBoard" aria-live="polite"></div>
+    <div class="game-map" role="list" aria-label="Free play arcade games">
+      <button class="game-card" data-game="builder" role="listitem">
+        <span class="game-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="3" x2="8" y2="21"/><rect x="5" y="8" width="6" height="8" rx="1.5"/><line x1="16" y1="4" x2="16" y2="20"/><rect x="13" y="6" width="6" height="9" rx="1.5"/></svg></span>
+        <b>Candle Builder</b><small>Watch a candle form, then read what it says.</small><em>Anatomy · +20 XP</em>
+      </button>
+      <button class="game-card" data-game="hunt" role="listitem">
+        <span class="game-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg></span>
+        <b>Pattern Hunt</b><small>Name the setup from the schematic before the reveal.</small><em>Recognition · +30 XP</em>
+      </button>
+      <button class="game-card" data-game="shape" role="listitem">
+        <span class="game-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 18l4-8 4 4 4-9 6 13H3Z"/></svg></span>
+        <b>Shape Match</b><small>Name the chart structure from its swings.</small><em>Structure · +30 XP</em>
+      </button>
+      <button class="game-card" data-game="detective" role="listitem">
+        <span class="game-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="10" r="6.5"/><line x1="15" y1="15" x2="21" y2="21"/></svg></span>
+        <b>Fakeout Detective</b><small>Real break, fakeout, or stretched chase? Verdict time.</small><em>Anti-trap · +35 XP</em>
+      </button>
+      <button class="game-card" data-game="samurai" role="listitem">
+        <span class="game-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2.5l7.5 3v6c0 5-3.2 8.4-7.5 10-4.3-1.6-7.5-5-7.5-10v-6l7.5-3Z"/></svg></span>
+        <b>Stop Loss Samurai</b><small>Place the stop where the trade idea is actually wrong.</small><em>Risk · +35 XP</em>
+      </button>
+    </div>
+    <div id="freeShell" class="game-shell panel" hidden data-reveal>
+      <div class="game-shell-head">
+        <div>
+          <span class="badge">FREE PLAY</span>
+          <h2 id="freeTitle" style="margin:.4rem 0">Game</h2>
+          <p class="lead" id="freeDesc" style="font-size:1rem"></p>
+        </div>
+        <button class="btn btn-primary" id="freeNext">Next round →</button>
+      </div>
+      <div class="game-board" id="freeBoard" aria-live="polite"></div>
+    </div>
   </section>
 
-  <section class="grid g3 arcade-lessons" data-reveal>
-    <div class="card">
-      <span class="badge">Daily loop</span>
-      <h3>5 minutes of reps beats rereading a cheat sheet</h3>
-      <p class="small">The arcade is built around active recall: make the call first, then see what happened and why. That trains the eye faster than passive reading.</p>
-    </div>
-    <div class="card">
-      <span class="badge">Visual learner path</span>
-      <h3>See → choose → reveal → explain</h3>
-      <p class="small">Every mode follows the same loop so beginners know what to look for: wick rejection, candle close, structure, direction, risk, and confirmation.</p>
-    </div>
-    <div class="card">
-      <span class="badge">Shop tie-in</span>
-      <h3>Turn the best lessons into desk tools</h3>
-      <p class="small">The Candle Builder and Stop Loss Samurai lessons map directly to desk mats, mouse pads, and posters that become daily reminders while trading.</p>
-    </div>
-  </section>
-
-  <section class="panel arcade-roadmap" data-reveal>
-    <span class="kicker">Next unlocks</span>
-    <h2>What we can add after this v1</h2>
-    <div class="roadmap-track">
-      <div><b>1</b><span>Expanded live-market scoring</span><small>More symbols, longer rounds, replays, and saved decision history.</small></div>
-      <div><b>2</b><span>Options Payoff Puzzle</span><small>Calls, puts, spreads, breakeven, max loss, max gain.</small></div>
-      <div><b>3</b><span>Binary Breakeven Lab</span><small>Payout math, expected value, and survival simulations.</small></div>
-      <div><b>4</b><span>Trader profiles</span><small>Saved progress, badges, leaderboards, and Pro challenges.</small></div>
-    </div>
-    <div class="warn"><b>Educational only:</b> these games teach chart reading and risk concepts with virtual practice. They are not financial advice, trade signals, or promises of profit.</div>
+  <section class="warn" data-reveal>
+    <b>Educational only:</b> the Academy teaches chart reading and risk concepts with schematic charts and virtual XP. It is not financial advice, trade signals, or a promise of profit. Live Practice uses real market data but never real money.
   </section>
 </main>
 
-<script src="/js/candles.js"></script>
-<script src="/js/patterns-data.js"></script>
-<script src="/js/app.js"></script>
-<script src="/js/academy.js"></script>
+<script src="/js/candles.js?v=2"></script>
+<script src="/js/patterns-data.js?v=2"></script>
+<script src="/js/market.js?v=2"></script>
+<script src="/js/pattern-detector.js?v=2"></script>
+<script src="/js/app.js?v=2"></script>
+<script src="/js/academy.js?v=2"></script>
+<script>
+(function(){
+  // "Continue" jumps to the first unfinished (unlocked) lesson
+  document.getElementById('resumeBtn').addEventListener('click', function(){
+    const done = JSON.parse(localStorage.getItem('theai101-academy-v2')||'{}').done || {};
+    const order = [];
+    document.querySelectorAll('#pathMap .node').forEach(n=>{});
+    const first = [...document.querySelectorAll('#pathMap .node')].find(n=>!n.classList.contains('locked') && !n.classList.contains('done'));
+    if(first) first.click();
+    else document.getElementById('path').scrollIntoView({behavior:'smooth'});
+  });
+})();
+</script>
 </body>
 </html>
