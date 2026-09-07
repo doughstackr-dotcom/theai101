@@ -7,6 +7,7 @@ const NAV = `
 <div class="nav-inner">
   <a class="logo" href="/"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><rect x="2" y="6" width="4" height="7" rx="1" fill="#ef4444"/><line x1="4" y1="2" x2="4" y2="15" stroke="#ef4444" stroke-width="1.4"/><rect x="11" y="3" width="4" height="8" rx="1" fill="#22c55e"/><line x1="13" y1="1" x2="13" y2="16" stroke="#22c55e" stroke-width="1.4"/></svg>TheAI<span class="tick">101</span></a>
   <div class="links">
+    <a href="/academy/" data-nav="academy">Academy Arcade</a>
     <a href="/candles/anatomy.html" data-nav="anatomy">Anatomy</a>
     <a href="/candles/patterns.html" data-nav="patterns">Candle Patterns</a>
     <a href="/patterns/" data-nav="chartp">Chart Patterns</a>
@@ -14,13 +15,13 @@ const NAV = `
     <a href="/markets/" data-nav="markets">Markets</a>
     <a href="/shop.html" data-nav="shop">Shop</a>
   </div>
-  <a class="cta" href="/shop.html">Get the Desk Mat</a>
+  <a class="cta" href="/academy/">Enter Arcade</a>
 </div>`;
 
 const FOOT = `
 <div class="foot-inner">
   <div>TheAI101 — learn the charts, wear the charts.</div>
-  <div><a href="/markets/">Markets</a> · <a href="/candles/patterns.html">Patterns</a> · <a href="/shop.html">Shop</a> · <a href="/about.html">About</a></div>
+  <div><a href="/academy/">Academy Arcade</a> · <a href="/markets/">Markets</a> · <a href="/candles/patterns.html">Patterns</a> · <a href="/shop.html">Shop</a> · <a href="/about.html">About</a></div>
   <div>Educational content only — not financial advice.</div>
 </div>`;
 
