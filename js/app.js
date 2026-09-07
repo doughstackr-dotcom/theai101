@@ -13,7 +13,7 @@ const NAV = `
     <a href="/patterns/" data-nav="chartp">Chart Patterns</a>
     <a href="/candles/practice.html" data-nav="practice">Practice</a>
     <a href="/markets/" data-nav="markets">Markets</a>
-    <a href="/shop.html" data-nav="shop">Shop</a>
+    <a href="https://trading-101.printify.me" data-nav="shop" target="_blank" rel="noopener">Shop</a>
   </div>
   <a class="cta" href="/academy/">Enter Arcade</a>
 </div>`;
@@ -21,7 +21,7 @@ const NAV = `
 const FOOT = `
 <div class="foot-inner">
   <div>TheAI101 — learn the charts, wear the charts.</div>
-  <div><a href="/academy/">Academy Arcade</a> · <a href="/markets/">Markets</a> · <a href="/candles/patterns.html">Patterns</a> · <a href="/shop.html">Shop</a> · <a href="/about.html">About</a></div>
+  <div><a href="/academy/">Academy Arcade</a> · <a href="/markets/">Markets</a> · <a href="/candles/patterns.html">Patterns</a> · <a href="https://trading-101.printify.me" target="_blank" rel="noopener">Shop</a> · <a href="/about.html">About</a></div>
   <div>Educational content only — not financial advice.</div>
 </div>`;
 
