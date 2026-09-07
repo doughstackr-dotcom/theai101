@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Shop — Trading Gear That Teaches — TheAI101</title>
+<meta name="description" content="Desk mats, mouse pads and posters that double as trading references — the same patterns you learned on the site, printed terminal-style. Print-on-demand, shipped worldwide.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/site.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'><rect x='2' y='6' width='4' height='7' rx='1' fill='%23ef4444'/><rect x='11' y='3' width='4' height='8' rx='1' fill='%2322c55e'/></svg>">
+</head>
+<body>
+<main class="wrap">
+  <span class="kicker">The shop</span>
+  <h1>Learn the charts. <span style="color:var(--green)">Own</span> the charts.</h1>
+  <p class="lead">Most trader merch is a joke shirt. This is <b>functional trader gear</b> — the same patterns you just learned on this site, printed terminal-style on the stuff that sits in front of you while you trade. Study at your desk, reference it mid-trade.</p>
+
+  <div class="grid g3" style="margin-top:1.5rem" id="shopGrid"></div>
+
+  <div class="note" style="margin-top:2rem">
+    <b>Every design matches the lessons.</b> Saw the Bullish Engulfing in <a href="/candles/patterns.html">the explorer</a>? It's cell 1 on the desk mat. Learning sticks when the reference lives on your desk.
+  </div>
+
+  <div class="warn">
+    <b>How ordering works:</b> checkout runs on <b>Printify</b> (print-on-demand — your item is printed and shipped after you order, worldwide). Each product opens its Printify page in a new tab.
+  </div>
+
+  <hr class="divider">
+  <section class="panel">
+    <h3 style="margin-top:0">Quality promise</h3>
+    <div class="grid g3">
+      <div><b class="mono small" style="color:var(--green)">PRINT-ON-DEMAND</b><p class="small">No warehouses, no waste. Items print only when ordered, by Printify's global print network.</p></div>
+      <div><b class="mono small" style="color:var(--green)">TRIPLE-CHECKED</b><p class="small">Printify runs a triple-check process on every product before it ships.</p></div>
+      <div><b class="mono small" style="color:var(--green)">30-DAY RETURNS</b><p class="small">Printify's standard policy covers print errors and delivery issues.</p></div>
+    </div>
+  </section>
+</main>
+
+<script src="/js/app.js"></script>
+<script>
+const products = [
+  {img:'/shop/img/deskmat.jpg', name:'Candlestick Command — Desk Mat', price:'$39',
+   desc:'All 14 candlestick patterns in a terminal-style grid, 90×40cm of it. The reference that turns dead desk space into study reps.', tag:'BESTSELLER'},
+  {img:'/shop/img/mousepad.jpg', name:'Risk First — Mouse Pad', price:'$18',
+   desc:'Position-size formula, the 2% rule and R:R visual, right under your hand. The half of trading that actually decides if you survive.', tag:'FUNCTIONAL'},
+  {img:'/shop/img/poster.jpg', name:'Chart Patterns — Wall Poster 18×24', price:'$24',
+   desc:'11 classic chart patterns — H&S, flags, triangles, wedges — drawn clean, with trade plans. Museum-grade print.', tag:'HIGH MARGIN'},
+  {img:'/shop/img/tee.jpg', name:'Bulls vs Bears — Tee', price:'$27',
+   desc:'Minimalist candle duel on comfort colors. For traders who prefer their merch like their charts: dark and clean.', tag:'WEAR IT'},
+  {img:'/shop/img/mug.jpg', name:'No Emotions. Just Charts. — Mug', price:'$15',
+   desc:'The pre-market mantra in candlestick script. 11oz ceramic, dishwasher safe, discipline not included.', tag:'GIFT'},
+  {img:'/shop/img/notebook.jpg', name:'Pre-Market Routine — Notebook', price:'$16',
+   desc:'Spiral notebook with a routine checklist cover. Plan the trade before the bell, review it after the close.', tag:'ROUTINE'},
+  {img:'/shop/img/stickers.jpg', name:'Bull & Bear Candle — Sticker Set', price:'$6',
+   desc:'Die-cut bull and bear candles. Laptops, monitors, trade journals. Warning: may out your trading habit at the coffee shop.', tag:'STOCKING STUFFER'},
+];
+const grid=document.getElementById('shopGrid');
+products.forEach(p=>{
+  const card=document.createElement('div');
+  card.className='pat-card';
+  card.innerHTML=`
+    <div style="position:relative">
+      <img class="prod-img" src="${p.img}" alt="${p.name}" loading="lazy" style="border-radius:0">
+      <span class="badge" style="position:absolute;top:.6rem;left:.6rem">${p.tag}</span>
+    </div>
+    <div class="pat-body" style="padding-top:.8rem">
+      <div style="display:flex;justify-content:space-between;gap:.5rem;align-items:baseline">
+        <h3 style="font-size:.98rem">${p.name}</h3>
+        <span class="price">${p.price}</span>
+      </div>
+      <p class="small" style="flex:1">${p.desc}</p>
+      <a class="btn btn-primary btn-sm buy" href="#" data-name="${p.name}">Buy at Printify →</a>
+    </div>`;
+  grid.appendChild(card);
+});
+grid.addEventListener('click',e=>{
+  const a=e.target.closest('.buy'); if(!a)return;
+  e.preventDefault();
+  const t=document.createElement('div');
+  t.textContent='Store link activates the moment the Printify store is connected — design is ready.';
+  t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#111827;border:1px solid #f59e0b;color:#f59e0b;padding:.6rem 1.2rem;border-radius:99px;font-size:.85rem;z-index:99;max-width:90vw;text-align:center';
+  document.body.appendChild(t);
+  setTimeout(()=>{t.style.transition='opacity .5s';t.style.opacity=0;setTimeout(()=>t.remove(),500);},2200);
+});
+</script>
+</body>
+</html>

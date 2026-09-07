@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Name That Pattern — Practice — TheAI101</title>
+<meta name="description" content="Train your eye: name the candlestick pattern from a live-drawn chart. Streak scoring, instant explanations.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/site.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'><rect x='2' y='6' width='4' height='7' rx='1' fill='%23ef4444'/><rect x='11' y='3' width='4' height='8' rx='1' fill='%2322c55e'/></svg>">
+</head>
+<body>
+<main class="wrap narrow">
+  <span class="kicker">Practice arena</span>
+  <h1>Name that pattern</h1>
+  <p class="lead">A chart draws itself. You call it. Explanations land the moment you answer — that's how the eye gets trained. <b>Level 1:</b> 4 choices · <b>Level 2:</b> 6 choices.</p>
+
+  <div class="scorebar" style="margin-top:1rem">
+    <span>ROUND <b id="qNum">1</b></span>
+    <span>STREAK <b id="qStreak">0</b> 🔥</span>
+    <span>BEST <b id="qBest">0</b></span>
+    <span>ACCURACY <b id="qAcc">—</b></span>
+  </div>
+
+  <div class="chart-frame">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem">
+      <span class="chip" id="qLevel">LEVEL 1</span>
+      <button class="btn btn-ghost btn-sm" id="qReplay">↻ Replay</button>
+    </div>
+    <svg id="qChart" viewBox="0 0 640 300" role="img" aria-label="Pattern to identify"></svg>
+    <div class="cap" id="qHint">Watch the candles form, then pick the pattern.</div>
+  </div>
+
+  <div class="quiz-opts" id="qOpts"></div>
+
+  <div class="ctrl">
+    <button class="btn btn-primary" id="qNext" style="visibility:hidden">Next round →</button>
+    <button class="btn btn-ghost btn-sm" id="qLvl">Switch to Level 2 (6 choices)</button>
+    <button class="btn btn-ghost btn-sm" id="qReset">Reset score</button>
+  </div>
+
+  <div class="warn"><b>How to actually use this:</b> don't memorize names — <b>read the shape</b>. Where did the wick reject? Who closed stronger? Real charts are messier than these schematics; on the real thing you're grading "close enough," and the only way there is reps.</div>
+</main>
+
+<script src="/js/candles.js"></script>
+<script src="/js/patterns-data.js"></script>
+<script src="/js/app.js"></script>
+<script>
+AI.onReady = function(){
+  const pats = AI.candles.filter(p=>p.name!=='Marubozu'); // schematic-only set for quiz
+  let level=1, round=0, streak=0, best=0, right=0, asked=0, cur=null, answered=false;
+  const svg=document.getElementById('qChart'), W=640,H=300,pad={l:12,r:14,t:14,b:12};
+  let lastCandles=[];
+
+  function pick(){
+    // random pattern + shuffled options
+    cur = pats[Math.floor(Math.random()*pats.length)];
+    answered=false;
+    const n = level===1?4:6;
+    const others = pats.filter(p=>p!==cur).sort(()=>Math.random()-.5).slice(0,n-1);
+    const opts = [...others, cur].sort(()=>Math.random()-.5);
+    document.getElementById('qNum').textContent=++round;
+    document.getElementById('qLevel').textContent='LEVEL '+level;
+    document.getElementById('qHint').textContent='Watch the candles form, then pick the pattern.';
+    // chart
+    svg.innerHTML='';
+    const ctx=AI.add('#qChart',W,H,pad);
+    ctx.scale(0,100); ctx.grid(6,3);
+    ctx.title('ROUND '+round+' — NAME THIS PATTERN','#64748b');
+    cur.draw(ctx,W,H,pad);
+    lastCandles=[...svg.querySelectorAll('g.cndl')];
+    lastCandles.forEach((g,i)=>{
+      g.style.opacity=0; g.style.transition='opacity .3s ease '+(i*170)+'ms';
+      requestAnimationFrame(()=>requestAnimationFrame(()=>g.style.opacity=1));
+    });
+    // options
+    const host=document.getElementById('qOpts'); host.innerHTML='';
+    opts.forEach(o=>{
+      const b=document.createElement('button');
+      b.className='quiz-opt'; b.textContent=o.name;
+      b.addEventListener('click',()=>answer(b,o));
+      host.appendChild(b);
+    });
+    document.getElementById('qNext').style.visibility='hidden';
+  }
+
+  function answer(btn,o){
+    if(answered)return; answered=true; asked++;
+    const btns=[...document.querySelectorAll('.quiz-opt')];
+    btns.forEach(b=>{ b.disabled=true; });
+    const ok = o===cur;
+    if(ok){ right++; streak++; best=Math.max(best,streak); btn.classList.add('correct'); }
+    else { streak=0; btn.classList.add('wrong');
+      btns.forEach(b=>{ if(b.textContent===cur.name) b.classList.add('correct'); });
+    }
+    document.getElementById('qStreak').textContent=streak;
+    document.getElementById('qBest').textContent=best;
+    const acc = asked? Math.round(right/asked*100)+'%':'—';
+    document.getElementById('qAcc').textContent=acc;
+    document.getElementById('qHint').innerHTML =
+      (ok?'<b class="up">✔ Correct.</b> ':'<b class="down">✘ It was <b>'+cur.name+'</b>.</b> ')
+      +cur.see+' <span class="dim">'+cur.means+'</span>';
+    // keep overlay candles fully visible
+    lastCandles.forEach(g=>g.style.opacity=1);
+    document.getElementById('qNext').style.visibility='visible';
+    if(streak>0 && streak%3===0) toast('🔥 '+streak+' in a row');
+  }
+
+  function toast(msg){
+    const t=document.createElement('div');
+    t.textContent=msg;
+    t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#111827;border:1px solid #22c55e;color:#22c55e;padding:.6rem 1.2rem;border-radius:99px;font-family:JetBrains Mono,monospace;font-size:.9rem;z-index:99';
+    document.body.appendChild(t);
+    setTimeout(()=>{t.style.transition='opacity .5s';t.style.opacity=0;setTimeout(()=>t.remove(),500);},1400);
+  }
+
+  document.getElementById('qNext').addEventListener('click',pick);
+  document.getElementById('qReplay').addEventListener('click',()=>{
+    svg.innerHTML='';
+    const ctx=AI.add('#qChart',W,H,pad);
+    ctx.scale(0,100); ctx.grid(6,3);
+    ctx.title('ROUND '+round+' — NAME THIS PATTERN','#64748b');
+    cur.draw(ctx,W,H,pad);
+    [...svg.querySelectorAll('g.cndl')].forEach((g,i)=>{
+      g.style.opacity=0; g.style.transition='opacity .3s ease '+(i*170)+'ms';
+      requestAnimationFrame(()=>requestAnimationFrame(()=>g.style.opacity=1));
+    });
+  });
+  document.getElementById('qLvl').addEventListener('click',e=>{
+    level = level===1?2:1;
+    e.target.textContent = level===1? 'Switch to Level 2 (6 choices)':'Switch to Level 1 (4 choices)';
+    pick();
+  });
+  document.getElementById('qReset').addEventListener('click',()=>{
+    round=0;streak=0;best=0;right=0;asked=0;
+    ['qStreak','qBest'].forEach(id=>document.getElementById(id).textContent=0);
+    document.getElementById('qAcc').textContent='—';
+    pick();
+  });
+
+  pick();
+};
+</script>
+</body>
+</html>

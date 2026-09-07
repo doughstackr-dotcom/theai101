@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stock Trading for Visual Learners — TheAI101</title>
+<meta name="description" content="How stock trading actually works: market vs limit orders, market hours, position sizing — with visual order-book and trade-lifecycle diagrams.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/site.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'><rect x='2' y='6' width='4' height='7' rx='1' fill='%23ef4444'/><rect x='11' y='3' width='4' height='8' rx='1' fill='%2322c55e'/></svg>">
+</head>
+<body>
+<main class="wrap">
+  <span class="kicker">Markets · Stocks</span>
+  <h1>📈 Stocks — owning a piece of the action</h1>
+  <p class="lead">A share is fractional ownership of a real company. No expiry date, no forced exit, no leverage (unless you ask for it). That's why stocks are the best classroom: your mistakes teach slowly instead of vaporizing the account.</p>
+
+  <div class="grid g2" style="margin-top:1.25rem">
+    <div class="panel">
+      <h3 style="margin-top:0">Market order — "buy it now"</h3>
+      <p class="small">Fills instantly at whatever the current price is. You trade <b>certainty of execution</b> for <b>uncertainty of price</b>. Fine for big, liquid stocks. Dangerous in fast markets or thin ones.</p>
+    </div>
+    <div class="panel">
+      <h3 style="margin-top:0">Limit order — "buy it at my price"</h3>
+      <p class="small">Fills only at your price or better. You trade <b>certainty of price</b> for <b>uncertainty of execution</b> — it might never fill. This is how patient traders buy pullbacks and sell rips.</p>
+    </div>
+  </div>
+
+  <h2>The order book — see where a stock is standing</h2>
+  <p class="lead">Every stock has two queues: <b class="down">bids</b> (what buyers offer) and <b class="up">asks</b> (what sellers demand). The gap between the best ones is the <b>spread</b> — your instant cost of crossing it.</p>
+  <div class="chart-frame">
+    <svg id="obSvg" viewBox="0 0 720 300" role="img" aria-label="Order book depth diagram"></svg>
+    <div class="cap">Bids stack below the last price, asks above. Big walls can act as short-term support/resistance.</div>
+  </div>
+
+  <h2>The trading day</h2>
+  <p class="lead">US markets (NYSE/Nasdaq) aren't open 24h — and the open and close are where most of the volatility lives.</p>
+  <div class="chart-frame">
+    <svg id="clockSvg" viewBox="0 0 720 120" role="img" aria-label="Market session timeline in ET"></svg>
+    <div class="cap">All times US Eastern. Pre-market and after-hours: thinner, gappier, easier to get a bad fill.</div>
+  </div>
+
+  <h2>Position sizing — the part everyone skips</h2>
+  <div class="panel">
+    <p class="small" style="margin-bottom:.6rem">Never risk a fixed <i>dollar</i> amount — risk a fixed <i>percent</i>, and let the stop distance determine share count:</p>
+    <div class="calc-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.7rem;margin:.6rem 0">
+      <div><label class="small mono">Account ($)</label><input id="pA" type="number" value="10000" style="width:100%;background:var(--bg);border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:.5rem;font-family:var(--mono)"></div>
+      <div><label class="small mono">Risk %</label><input id="pR" type="number" value="1" step="0.25" style="width:100%;background:var(--bg);border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:.5rem;font-family:var(--mono)"></div>
+      <div><label class="small mono">Entry</label><input id="pE" type="number" value="50" style="width:100%;background:var(--bg);border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:.5rem;font-family:var(--mono)"></div>
+      <div><label class="small mono">Stop</label><input id="pS" type="number" value="48.5" style="width:100%;background:var(--bg);border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:.5rem;font-family:var(--mono)"></div>
+    </div>
+    <div class="calc-out mono" id="pOut" style="font-size:.95rem"></div>
+  </div>
+
+  <div class="warn"><b>Beginner traps:</b> chasing gap-up opens · averaging down without a plan · trading penny stocks on hype · ignoring that a 50% loss needs a 100% gain to recover. Losses compound the same way gains do — in reverse.</div>
+
+  <div class="ctrl" style="margin-top:2rem">
+    <a class="btn btn-primary" href="/markets/options.html">Next: options →</a>
+    <a class="btn btn-ghost" href="/markets/">All markets</a>
+  </div>
+</main>
+
+<script src="/js/app.js"></script>
+<script>
+AI.onReady = function(){
+  const NS='http://www.w3.org/2000/svg';
+  const mk=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+
+  // ── Order book ──
+  (function(){
+    const svg=document.getElementById('obSvg');
+    const bids=[['$99.98','1,200'],['$99.97','2,400'],['$99.96','900'],['$99.95','3,800'],['$99.94','1,500']];
+    const asks=[['$100.02','800'],['$100.03','1,900'],['$100.04','2,700'],['$100.05','1,100'],['$100.06','4,200']];
+    const maxQ=4200, X=150, W=400, RH=26, top=18;
+    const scale=q=>q/maxQ*W;
+    // asks (red, descending from top)
+    asks.forEach((a,i)=>{
+      const y=top+i*RH;
+      svg.appendChild(mk('rect',{x:X,y,width:scale(a[1]),height:RH-4,fill:'#ef4444',opacity:.75,rx:2}));
+      const t=mk('text',{x:X-8,y:y+RH/2-4+4,fill:'#f87171','text-anchor':'end','font-size':11,'font-family':'JetBrains Mono,monospace'});t.textContent=a[0]+'  '+a[1];svg.appendChild(t);
+    });
+    // spread zone
+    const sy=top+asks.length*RH;
+    svg.appendChild(mk('rect',{x:X,y:sy+2,width:W,height:RH-2,fill:'#22d3ee',opacity:.12}));
+    const sp=mk('text',{x:X+W/2,y:sy+RH/2+4,fill:'#22d3ee','text-anchor':'middle','font-size':11,'font-weight':'bold','font-family':'JetBrains Mono,monospace'});
+    sp.textContent='SPREAD $0.04 — crossing it = instant cost';svg.appendChild(sp);
+    // bids (green, below)
+    bids.forEach((b,i)=>{
+      const y=sy+RH+4+i*RH;
+      svg.appendChild(mk('rect',{x:X,y,width:scale(b[1]),height:RH-4,fill:'#22c55e',opacity:.75,rx:2}));
+      const t=mk('text',{x:X-8,y:y+RH/2-4+4,fill:'#4ade80','text-anchor':'end','font-size':11,'font-family':'JetBrains Mono,monospace'});t.textContent=b[0]+'  '+b[1];svg.appendChild(t);
+    });
+    // labels
+    const la=mk('text',{x:X-8,y:top-4,fill:'#f87171','font-size':10,'text-anchor':'end','font-family':'JetBrains Mono,monospace'});la.textContent='ASKS (sellers)';svg.appendChild(la);
+    const lb=mk('text',{x:X-8,y:sy+RH+4+RH-4,fill:'#4ade80','font-size':10,'text-anchor':'end','font-family':'JetBrains Mono,monospace'});lb.textContent='BIDS (buyers)';svg.appendChild(lb);
+  })();
+
+  // ── Session timeline ──
+  (function(){
+    const svg=document.getElementById('clockSvg');
+    // 4:00 ET -> 20:00 ET mapped to x 40..680
+    const X0=40, X1=680, y=44, H=26;
+    const xAt=h=>X0+(h-4)/16*(X1-X0);
+    const seg=(h1,h2,label,fill,op)=>{
+      svg.appendChild(mk('rect',{x:xAt(h1),y,width:xAt(h2)-xAt(h1),height:H,fill,opacity:op,rx:4}));
+      const t=mk('text',{x:(xAt(h1)+xAt(h2))/2,y:y+H+16,fill:'#94a3b8','text-anchor':'middle','font-size':10.5,'font-family':'JetBrains Mono,monospace'});
+      t.textContent=label; svg.appendChild(t);
+    };
+    seg(4,9.5,'PRE-MARKET','#a78bfa',.25);
+    seg(9.5,16,'REGULAR HOURS','#22c55e',.45);
+    seg(16,20,'AFTER HOURS','#a78bfa',.25);
+    // open/close markers
+    [['9:30 OPEN',9.5,'#4ade80'],['16:00 CLOSE',16,'#f87171']].forEach(([lbl,h,c])=>{
+      svg.appendChild(mk('line',{x1:xAt(h),y1:y-8,x2:xAt(h),y2:y+H+8,stroke:c,'stroke-width':2,'stroke-dasharray':'4 3'}));
+      const t=mk('text',{x:xAt(h),y:y-14,fill:c,'text-anchor':'middle','font-size':10.5,'font-weight':'bold','font-family':'JetBrains Mono,monospace'});t.textContent=lbl;svg.appendChild(t);
+    });
+    // hour ticks
+    [4,8,12,16,20].forEach(h=>{
+      const t=mk('text',{x:xAt(h),y:y+H+34,fill:'#64748b','text-anchor':'middle','font-size':10,'font-family':'JetBrains Mono,monospace'});t.textContent=h+':00 ET';svg.appendChild(t);
+    });
+  })();
+
+  // ── Position sizer ──
+  const out=document.getElementById('pOut');
+  function calc(){
+    const A=+document.getElementById('pA').value||0;
+    const R=+document.getElementById('pR').value||0;
+    const E=+document.getElementById('pE').value||0;
+    const S=+document.getElementById('pS').value||0;
+    const per=Math.abs(E-S);
+    if(!per||!A){out.innerHTML='<span style="color:#f59e0b">Entry and stop can\'t match.</span>';return;}
+    const shares=(A*R/100)/per;
+    out.innerHTML=`Risk <b>$${(A*R/100).toFixed(2)}</b> → buy <b>${Math.floor(shares).toLocaleString()} shares</b>`+
+      ` <span style="color:#64748b">(=$${(Math.floor(shares)*E).toFixed(0)} position)</span> · loss at stop: <b style="color:#ef4444">-$${(Math.floor(shares)*per).toFixed(2)}</b>`;
+  }
+  ['pA','pR','pE','pS'].forEach(id=>document.getElementById(id).addEventListener('input',calc));
+  calc();
+};
+</script>
+</body>
+</html>

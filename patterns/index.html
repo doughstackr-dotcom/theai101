@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chart Patterns Explorer — TheAI101</title>
+<meta name="description" content="Classic chart patterns — head & shoulders, flags, triangles, wedges, double tops — drawn as clean schematics with trade plans and failure modes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/site.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'><rect x='2' y='6' width='4' height='7' rx='1' fill='%23ef4444'/><rect x='11' y='3' width='4' height='8' rx='1' fill='%2322c55e'/></svg>">
+<style>
+.cpv{background:var(--bg2);border-radius:10px;margin:0 .75rem .5rem;display:block;width:calc(100% - 1.5rem)}
+dialog{background:var(--card);color:var(--text);border:1px solid var(--border2);border-radius:16px;max-width:860px;width:92%;padding:1.5rem}
+dialog::backdrop{background:rgba(4,7,12,.8)}
+.dlg-chart{background:var(--bg2);border-radius:12px;padding:.75rem}
+.dlg-chart svg{width:100%;height:auto;display:block}
+.facts4{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.8rem;margin-top:1rem}
+.facts4 .card h4{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin:0 0 .4rem}
+.facts4 .card p{font-size:.9rem;margin:0}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <span class="kicker">Chart patterns</span>
+  <h1>The bigger picture</h1>
+  <p class="lead">Candlesticks tell you what happened in a few sessions. Chart patterns tell you what's happening across weeks. Click any pattern for the full breakdown.</p>
+  <div class="grid g3" id="cpGrid" style="margin-top:1.25rem"></div>
+
+  <dialog id="cpDlg">
+    <div style="display:flex;justify-content:space-between;align-items:start;gap:1rem">
+      <div><h2 id="dName" style="margin:0"></h2><span class="small" id="dKind"></span></div>
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('cpDlg').close()">✕</button>
+    </div>
+    <div class="dlg-chart" style="margin-top:.8rem"><svg id="dChart" viewBox="0 0 820 320"></svg></div>
+    <div class="facts4">
+      <div class="card"><h4>👀 What you see</h4><p id="dSee"></p></div>
+      <div class="card"><h4>🧠 What it means</h4><p id="dMeans"></p></div>
+      <div class="card"><h4>🎯 How to trade it</h4><p id="dHow"></p></div>
+      <div class="card"><h4>⚠️ When it fails</h4><p id="dFail"></p></div>
+    </div>
+  </dialog>
+</main>
+
+<script src="/js/candles.js"></script>
+<script src="/js/patterns-data.js"></script>
+<script src="/js/app.js"></script>
+<script>
+AI.onReady = function(){
+  const grid=document.getElementById('cpGrid');
+  AI.chartPatterns.forEach((p,i)=>{
+    const card=document.createElement('div');
+    card.className='pat-card'; card.style.cursor='pointer';
+    card.innerHTML=`<div class="pat-head"><h3>${p.name}</h3>
+      <span class="chip ${p.bias==='Bullish'?'bull':'bear'}">${p.bias}</span></div>
+      <svg class="cpv" viewBox="0 0 340 140" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${p.name} diagram"></svg>
+      <div class="pat-body"><div class="pat-facts"><div><b>How to trade it</b>${p.how}</div></div></div>`;
+    grid.appendChild(card);
+    const c=AI.add(card.querySelector('.cpv'),340,140,{l:8,r:8,t:12,b:8});
+    AI.drawChartPattern(c,340,140,p);
+    card.addEventListener('click',()=>openDlg(i));
+  });
+
+  function openDlg(i){
+    const p=AI.chartPatterns[i];
+    document.getElementById('dName').textContent=p.name;
+    document.getElementById('dKind').textContent=p.kind+' · '+p.bias;
+    document.getElementById('dSee').textContent=p.see;
+    document.getElementById('dMeans').textContent=p.means;
+    document.getElementById('dHow').textContent=p.how;
+    document.getElementById('dFail').textContent=p.fail;
+    const svg=document.getElementById('dChart'); svg.innerHTML='';
+    const c=AI.add('#dChart',820,320,{l:14,r:14,t:16,b:12});
+    AI.drawChartPattern(c,820,320,p);
+    document.getElementById('cpDlg').showModal();
+  }
+  document.getElementById('cpDlg').addEventListener('click',e=>{
+    if(e.target.id==='cpDlg') e.target.close();
+  });
+};
+</script>
+</body>
+</html>
