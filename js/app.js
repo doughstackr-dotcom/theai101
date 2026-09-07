@@ -1,4 +1,4 @@
-/* TheAI101 shared app: ambient glass background + nav/footer + reveal animations */
+/* TheAI101 shared app: ambient glass background + nav/footer + reveal animations + theme toggle */
 (function(){
 'use strict';
 const AI = window.AI = window.AI || {};
@@ -16,6 +16,7 @@ const NAV = `
     <a href="https://trading-101.printify.me" data-nav="shop" target="_blank" rel="noopener">Shop</a>
   </div>
   <a class="cta" href="/academy/">Enter Arcade</a>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light/dark theme" title="Toggle theme">🌙</button>
 </div>`;
 
 const FOOT = `
@@ -73,8 +74,30 @@ function countUps(){
   });
 }
 
+function initTheme(){
+  const saved = localStorage.getItem('theai101-theme');
+  const theme = saved === 'light' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', theme);
+  syncThemeBtn();
+}
+function syncThemeBtn(){
+  const btn = document.getElementById('themeToggle');
+  if(btn) btn.textContent = document.documentElement.getAttribute('data-theme') === 'light' ? '☀️' : '🌙';
+}
+function toggleTheme(){
+  const cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+  const next = cur === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('theai101-theme', next);
+  syncThemeBtn();
+}
+
 document.addEventListener('DOMContentLoaded', ()=>{
+  initTheme();
   inject();
+  initTheme();
+  const tbtn = document.getElementById('themeToggle');
+  if(tbtn) tbtn.addEventListener('click', toggleTheme);
   observe();
   countUps();
   if(AI.onReady) AI.onReady();
