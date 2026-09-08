@@ -31,6 +31,7 @@ if (!CURRICULUM || !CURRICULUM.units) throw new Error('curriculum failed to load
 /* ── helpers ───────────────────────────────────────── */
 const SITE = 'https://theai101.shop';
 const LASTMOD = '2026-09-07';
+const VER = 4; // asset cache buster — bump when css/js change
 const FONT_LINK = 'https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Nunito:wght@400;700;800&family=JetBrains+Mono:wght@400;700&display=swap';
 const FAVICON = `<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'><rect x='2' y='6' width='4' height='7' rx='1' fill='%23e8590c'/><rect x='11' y='3' width='4' height='8' rx='1' fill='%23188a4e'/></svg>">`;
 
@@ -65,7 +66,7 @@ ${FAVICON}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="${FONT_LINK}" rel="stylesheet">
-<link rel="stylesheet" href="/css/site.css?v=2">`;
+<link rel="stylesheet" href="/css/site.css?v=${VER}">`;
 }
 
 /* flatten: all lessons in order, bosses excluded */
@@ -159,9 +160,9 @@ ${renderChecks(l.check)}
   <p class="small dim" style="margin-top:2.2rem">Educational content only — not financial advice.</p>
 
 </main>
-<script src="/js/candles.js?v=2"></script>
-<script src="/js/patterns-data.js?v=2"></script>
-<script src="/js/lesson-page.js?v=2"></script>
+<script src="/js/candles.js?v=${VER}"></script>
+<script src="/js/patterns-data.js?v=${VER}"></script>
+<script src="/js/lesson-page.js?v=${VER}"></script>
 </body>
 </html>
 `;
@@ -230,6 +231,7 @@ function sitemapXml() {
     `${SITE}/markets/options.html`,
     `${SITE}/markets/forex.html`,
     `${SITE}/markets/binary.html`,
+    `${SITE}/brokers/`,
     `${SITE}/about.html`
   ];
   return `<?xml version="1.0" encoding="UTF-8"?>

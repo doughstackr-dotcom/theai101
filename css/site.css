@@ -400,3 +400,14 @@ html[data-theme="dark"] .foot-inner a:hover{color:var(--accent)}
 .lab-legend{display:flex;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:.68rem;color:var(--ink-2);margin-top:.55rem}
 .lab-legend span{display:inline-flex;align-items:center;gap:.4rem}
 .lab-legend i{display:inline-block;width:18px;border-top:3px solid var(--accent);border-radius:2px}
+
+/* ── Collapsible path units ── */
+button.unit-head{width:100%;text-align:left;background:transparent;border:0;cursor:pointer;font-family:var(--sans);padding:.15rem 0}
+.unit-head .chev{margin-left:auto;flex:none;width:26px;height:26px;border:2px solid var(--ink);border-radius:8px;background:var(--paper-2);display:grid;place-items:center;box-shadow:2px 2px 0 var(--ink);transition:transform var(--dur) var(--ease)}
+.unit-head .chev svg{width:13px;height:13px}
+.unit-head:hover b{color:var(--accent-deep)}
+html[data-theme="dark"] .unit-head:hover b{color:var(--accent)}
+.unit-head:hover .chev{background:var(--yellow-soft)}
+.unit-block.collapsed .unit-nodes{display:none}
+.unit-block.collapsed .path-connector{display:none}
+.unit-block.collapsed .chev{transform:rotate(-90deg)}

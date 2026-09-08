@@ -662,19 +662,33 @@ function nodeIcon(l){
 }
 function renderPath(){
   const host = $('pathMap'); if(!host) return;
+  if(!prog.unitsOpen) prog.unitsOpen = {};
+  // the unit holding the next lesson to do is open by default
+  let currentUnitId = null;
+  const nextNode = ORDER.find(l=>isUnlocked(l.id) && !prog.done[l.id]);
+  if(nextNode) currentUnitId = UNIT_OF[nextNode.id];
   host.innerHTML = '';
   CURRICULUM.forEach(u=>{
     const lessons = u.lessons.map(l=>Object.assign({},l)).concat(BOSSES[u.id]?[BOSSES[u.id]]:[]);
-    const uDone = lessons.every(l=>prog.done[l.id]);
+    const doneCount = lessons.filter(l=>prog.done[l.id]).length;
+    const uDone = doneCount === lessons.length;
+    const open = (prog.unitsOpen[u.id]!=null) ? !!prog.unitsOpen[u.id] : (u.id===currentUnitId);
     const block = document.createElement('div');
-    block.className = 'unit-block';
+    block.className = 'unit-block' + (open?'':' collapsed');
     block.innerHTML = `
-      <div class="unit-head">
+      <button class="unit-head" aria-expanded="${open?'true':'false'}" title="${open?'Collapse unit':'Expand unit'}">
         <span class="unit-no">U${CURRICULUM.indexOf(u)+1}</span>
         <b>${u.title}</b>
-        <small>${u.tag}${uDone?' · cleared':''}</small>
-      </div>
+        <small>${u.tag} · ${doneCount}/${lessons.length}${uDone?' · cleared':''}</small>
+        <span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+      </button>
       <div class="unit-nodes"></div>`;
+    block.querySelector('.unit-head').addEventListener('click',()=>{
+      const nowOpen = block.classList.toggle('collapsed') === false;
+      block.querySelector('.unit-head').setAttribute('aria-expanded', nowOpen?'true':'false');
+      prog.unitsOpen[u.id] = nowOpen;
+      save();
+    });
     const nodes = block.querySelector('.unit-nodes');
     lessons.forEach((l,i)=>{
       const done = !!prog.done[l.id];

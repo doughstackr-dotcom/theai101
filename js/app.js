@@ -26,6 +26,7 @@ const NAV = `
     <a href="/candles/patterns.html" data-nav="patterns">Patterns</a>
     <a href="/patterns/" data-nav="chartp">Chart Shapes</a>
     <a href="/markets/" data-nav="markets">Markets</a>
+    <a href="/brokers/" data-nav="brokers">Brokers</a>
     <a href="/prolab/" data-nav="prolab">Pro Labs</a>
     <a href="/cheatsheet/" data-nav="cheatsheet">Cheat sheet</a>
     <a href="https://trading-101.printify.me" data-nav="shop" target="_blank" rel="noopener">Shop</a>
@@ -38,7 +39,7 @@ const NAV = `
 const FOOT = `
 <div class="foot-inner">
   <div><b style="font-family:var(--disp)">TheAI101</b> — learn the charts, wear the charts.</div>
-  <div><a href="/candles/anatomy.html">Start here</a> · <a href="/academy/">Academy</a> · <a href="/practice/">Live Practice</a> · <a href="/candles/patterns.html">Patterns</a> · <a href="/markets/">Markets</a> · <a href="/prolab/">Pro Labs</a> · <a href="/cheatsheet/">Cheat sheet</a> · <a href="https://trading-101.printify.me" target="_blank" rel="noopener">Shop</a> · <a href="/about.html">About</a></div>
+  <div><a href="/candles/anatomy.html">Start here</a> · <a href="/academy/">Academy</a> · <a href="/practice/">Live Practice</a> · <a href="/candles/patterns.html">Patterns</a> · <a href="/markets/">Markets</a> · <a href="/brokers/">Brokers</a> · <a href="/prolab/">Pro Labs</a> · <a href="/cheatsheet/">Cheat sheet</a> · <a href="https://trading-101.printify.me" target="_blank" rel="noopener">Shop</a> · <a href="/about.html">About</a></div>
   <div>Educational content only — not financial advice. Market data for practice only.</div>
 </div>`;
 
